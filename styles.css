@@ -298,5 +298,47 @@ section.block{max-width:var(--maxw);margin:0 auto;padding:64px 40px 20px}
   .search-wrap{width:100%}
   .topbar-inner{flex-direction:column;align-items:stretch;gap:10px}
 }
+/* ---------- VANILLA BADGES (on trap/puzzle/mechanism cards) ---------- */
+.vanilla-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;align-items:center}
+.vanilla-badges-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-right:4px}
+.vanilla-pill{
+  font-size:11px;padding:3px 9px;border-radius:999px;
+  background:rgba(143,183,201,.08);border:1px solid rgba(143,183,201,.22);
+  color:var(--accent);white-space:nowrap;
+}
+
+/* ---------- VANILLA INTERACTIONS SECTION ---------- */
+.vi-filters{margin-bottom:10px}
+.vi-count{font-size:12.5px;color:var(--text-mute);margin:4px 0 18px}
+.vi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.vi-card{
+  background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius-sm);
+  padding:20px 20px 16px;transition:.25s var(--ease);
+}
+.vi-card:hover{border-color:var(--line);transform:translateY(-2px)}
+.vi-header{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.vi-item{font-size:16px;font-family:'Fraunces',serif;font-weight:600;color:var(--text)}
+.vi-category{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.vi-interactions{display:flex;flex-direction:column;gap:10px}
+.vi-interaction{padding:8px 12px;background:var(--bg-2);border:1px solid var(--line-soft);border-left:3px solid var(--gold);border-radius:8px}
+.vi-context{font-size:12.5px;font-weight:600;color:var(--gold-soft);margin-bottom:3px}
+.vi-effect{font-size:13px;color:var(--text-dim);line-height:1.45}
+.vi-dungeons{font-size:11px;color:var(--text-mute);margin-top:4px;font-style:italic}
+
+/* ---------- VANILLA IN MODALS ---------- */
+.vanilla-sub{color:var(--accent)!important}
+.vanilla-list li::before{background:var(--accent)!important}
+
+/* ---------- SIDEBAR EXTERNAL LINK ---------- */
+.side-nav-ext{
+  margin-top:auto;padding-top:12px;border-top:1px solid var(--line-soft);
+  display:flex;align-items:center;gap:11px;
+  padding:9px 12px;border-radius:10px;
+  font-size:13px;color:var(--gold-soft);
+  transition:.2s var(--ease);
+}
+.side-nav-ext:hover{background:var(--surface);color:var(--gold)}
+.side-nav-ext .ix{font-size:13px;color:var(--gold-soft);width:16px;text-align:center}
+
 .reveal{opacity:0;transform:translateY(16px)}
 .reveal.in{opacity:1;transform:none;transition:opacity .6s var(--ease),transform .6s var(--ease)}

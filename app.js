@@ -34,9 +34,10 @@
     { id:"puzles",       label:"Puzles",           ix:"05" },
     { id:"mecanismos",   label:"Mecanismos",       ix:"06" },
     { id:"npcs",         label:"NPCs y campamento", ix:"07" },
-    { id:"dependencias", label:"Dependencias",     ix:"08" },
-    { id:"rendimiento",  label:"Rendimiento",      ix:"09" },
-    { id:"roadmap",      label:"Producción",       ix:"10" }
+    { id:"vanilla",      label:"Items vanilla",    ix:"08" },
+    { id:"dependencias", label:"Dependencias",     ix:"09" },
+    { id:"rendimiento",  label:"Rendimiento",      ix:"10" },
+    { id:"roadmap",      label:"Produccion",       ix:"11" }
   ];
 
 
@@ -45,7 +46,9 @@
     q("#sideNav").innerHTML = NAV.map(function(n){
       return '<a href="#'+n.id+'" data-target="'+n.id+'">'
         + '<span class="ix">'+n.ix+'</span>'+esc(n.label)+'</a>';
-    }).join("");
+    }).join("")
+    + '<a href="technical-plan.html" target="_blank" class="side-nav-ext">'
+    + '<span class="ix">&#x2197;</span>Plan tecnico completo</a>';
   }
 
   /* ---------- HERO + INICIO ---------- */
@@ -142,6 +145,7 @@
     +   '<div><div class="m-sub">Secretos y rutas</div>'+list(d.secrets)+'</div>'
     + '</div>'
     + '<div class="m-sub">Enemigos asignados ('+mobs.length+')</div>'+chips(mobs.map(function(c){return c.name+" · "+RANK_LABEL[c.rank];}))
+    + (d.vanillaItemsKey && d.vanillaItemsKey.length ? '<div class="m-sub vanilla-sub">Items vanilla clave</div><ul class="m-list vanilla-list">'+d.vanillaItemsKey.map(function(v){return '<li>'+esc(v)+'</li>';}).join("")+'</ul>' : '')
     + '<div class="m-sub">Entrada · salida · reinicio</div><div class="meta-rows">'+rows+'</div>';
   }
 
@@ -197,6 +201,13 @@
   function mobModal(c){
     function list(arr,cls){ if(!arr||!arr.length) return ""; return '<ul class="m-list '+(cls||"")+'">'+arr.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>'; }
     var col = dungeonColor(c.dungeon);
+    var vanillaSection = "";
+    if(c.vanilla && c.vanilla.length){
+      vanillaSection = '<div class="m-sub vanilla-sub">Interacciones Vanilla</div>'
+        + '<ul class="m-list vanilla-list">' + c.vanilla.map(function(v){
+          return '<li>'+esc(v)+'</li>';
+        }).join("") + '</ul>';
+    }
     return '<div class="m-head"><div class="m-rank r-'+c.rank+'" style="display:inline-block;padding:4px 12px;border-radius:999px">'+RANK_LABEL[c.rank]+'</div>'
       + '<h2>'+esc(c.name)+'</h2><div class="m-en">'+esc(c.en)+' · <span style="color:'+col+'">'+esc(dungeonName(c.dungeon))+'</span></div></div>'
       + '<div class="m-stats"><div class="m-stat"><div class="k">Vida</div><div class="val">'+esc(c.hp)+'</div></div>'
@@ -204,7 +215,8 @@
       + '<div class="m-stat"><div class="k">Daño</div><div class="val">'+esc(c.dmg)+'</div></div></div>'
       + '<p class="desc">'+esc(c.desc)+'</p>'
       + (c.behavior&&c.behavior.length ? '<div class="m-sub">Comportamiento y ataques</div>'+list(c.behavior) : '')
-      + (c.drops&&c.drops.length ? '<div class="m-sub">Botín</div>'+list(c.drops,"drops") : '');
+      + (c.drops&&c.drops.length ? '<div class="m-sub">Botín</div>'+list(c.drops,"drops") : '')
+      + vanillaSection;
   }
 
 
@@ -214,10 +226,18 @@
     var tag = o.category ? '<span class="tag">'+esc(o.category)+'</span>' : '';
     var homes = o.dungeon ? o.dungeon.map(dungeonName).join(" · ") : "";
     var cfg = o.config ? '<div class="cfg">'+o.config.map(function(x){return '<span>'+esc(x)+'</span>';}).join("")+'</div>' : "";
+    var vanillaBadges = "";
+    if(o.vanilla && o.vanilla.length){
+      var pills = o.vanilla.map(function(v){
+        var item = v.split(":")[0].trim();
+        return '<span class="vanilla-pill">'+esc(item)+'</span>';
+      }).join("");
+      vanillaBadges = '<div class="vanilla-badges"><span class="vanilla-badges-label">Vanilla</span>'+pills+'</div>';
+    }
     return '<article class="tcard reveal"><h4>'+esc(o.name)+(isNew?'<span class="badge-new">NUEVO</span>':'')+'</h4>'
       + tag + '<p>'+esc(o.desc)+'</p>'
       + (homes?'<div class="cfg" style="margin-top:10px"><span style="color:var(--gold-soft);border-color:rgba(216,178,106,.3)">'+esc(homes)+'</span></div>':'')
-      + cfg + '</article>';
+      + cfg + vanillaBadges + '</article>';
   }
 
   function renderTrampas(){
@@ -243,6 +263,77 @@
       + '<p class="sec-lead">La base física reutilizable del mod: activadores, mecanismos manuales, pasadizos y el sistema de resonancia que conecta sonido, sigilo, trampas y secretos.</p>'
       + '<div class="card-grid">'+D.mechanisms.map(catCard).join("")+'</div></section>'
       + '<div class="divider"></div>';
+  }
+
+
+  /* ---------- VANILLA INTERACTIONS ---------- */
+  var vanillaState = { filter:"all" };
+
+  function renderVanillaInteractions(){
+    /* Collect unique dungeons from all interactions */
+    var dungeonSet = {};
+    D.vanillaInteractions.forEach(function(vi){
+      vi.interactions.forEach(function(inter){
+        if(inter.dungeon) inter.dungeon.forEach(function(did){ dungeonSet[did] = true; });
+      });
+    });
+    /* Collect unique categories */
+    var catSet = {};
+    D.vanillaInteractions.forEach(function(vi){ if(vi.category) catSet[vi.category] = true; });
+
+    var dChips = '<div class="chip active" data-vf="all">Todos</div>'
+      + Object.keys(catSet).map(function(c){ return '<div class="chip" data-vf="cat:'+esc(c)+'">'+esc(c)+'</div>'; }).join("")
+      + Object.keys(dungeonSet).map(function(did){ return '<div class="chip" data-vf="dun:'+did+'">'+esc(dungeonName(did))+'</div>'; }).join("");
+
+    var cards = D.vanillaInteractions.map(function(vi){
+      var interactions = vi.interactions.map(function(inter){
+        var dNames = inter.dungeon ? inter.dungeon.map(dungeonName).join(", ") : "";
+        return '<div class="vi-interaction">'
+          + '<div class="vi-context">'+esc(inter.context)+'</div>'
+          + '<div class="vi-effect">'+esc(inter.effect)+'</div>'
+          + (dNames ? '<div class="vi-dungeons">'+esc(dNames)+'</div>' : '')
+          + '</div>';
+      }).join("");
+      var dungeonIds = [];
+      vi.interactions.forEach(function(inter){ if(inter.dungeon) inter.dungeon.forEach(function(d){ if(dungeonIds.indexOf(d)===-1) dungeonIds.push(d); }); });
+      return '<article class="vi-card reveal" data-vi-cat="'+esc(vi.category)+'" data-vi-dun="'+dungeonIds.join(",")+'">'
+        + '<div class="vi-header">'
+        + '<h4 class="vi-item">'+esc(vi.item)+'</h4>'
+        + '<span class="vi-category">'+esc(vi.category)+'</span>'
+        + '</div>'
+        + '<div class="vi-interactions">'+interactions+'</div>'
+        + '</article>';
+    }).join("");
+
+    return '<section class="block" id="vanilla">'
+      + '<div class="eyebrow">Integracion con el juego base</div>'
+      + '<h2 class="sec-title">Items vanilla en las mazmorras</h2>'
+      + '<p class="sec-lead">Cada item vanilla de Minecraft tiene un proposito real dentro de las dungeons: resolver puzles, desactivar trampas, explotar debilidades de criaturas y activar mecanismos. Nada sobra, todo sirve. Filtra por categoria o por mazmorra.</p>'
+      + '<div class="filters vi-filters" id="vFilters">'+dChips+'</div>'
+      + '<div class="vi-count" id="viCount">'+D.vanillaInteractions.length+' items</div>'
+      + '<div class="vi-grid" id="viGrid">'+cards+'</div>'
+      + '</section><div class="divider"></div>';
+  }
+
+  function filterVanillaGrid(){
+    var cards = qa(".vi-card");
+    var f = vanillaState.filter;
+    var count = 0;
+    cards.forEach(function(card){
+      var show = true;
+      if(f !== "all"){
+        if(f.indexOf("cat:") === 0){
+          show = card.getAttribute("data-vi-cat") === f.slice(4);
+        } else if(f.indexOf("dun:") === 0){
+          var duns = card.getAttribute("data-vi-dun").split(",");
+          show = duns.indexOf(f.slice(4)) !== -1;
+        }
+      }
+      card.style.display = show ? "" : "none";
+      if(show) count++;
+    });
+    var countEl = q("#viCount");
+    if(countEl) countEl.textContent = count + (count===1?" item":" items");
   }
 
 
@@ -392,7 +483,8 @@
     q("#sections").innerHTML =
         renderInicio() + renderDungeons() + renderBestiario()
       + renderTrampas() + renderPuzles() + renderMecanismos()
-      + renderNpcs() + renderDeps() + renderPerf() + renderRoadmap();
+      + renderNpcs() + renderVanillaInteractions()
+      + renderDeps() + renderPerf() + renderRoadmap();
 
     renderMobGrid();
 
@@ -409,6 +501,17 @@
       if(mc){ var c = creatureById[mc.getAttribute("data-mob")]; if(c) openModal(mobModal(c)); return; }
       var chip = e.target.closest(".chip");
       if(chip){
+        /* Vanilla filter chips */
+        var vf = chip.getAttribute("data-vf");
+        if(vf !== null){
+          var parent = chip.parentNode;
+          qa(".chip", parent).forEach(function(c){ c.classList.remove("active"); });
+          chip.classList.add("active");
+          vanillaState.filter = vf;
+          filterVanillaGrid();
+          return;
+        }
+        /* Bestiary filter chips */
         var f = chip.getAttribute("data-f"), v = chip.getAttribute("data-v");
         var parent = chip.parentNode;
         qa(".chip", parent).forEach(function(c){ c.classList.remove("active"); });
@@ -417,11 +520,18 @@
       }
     });
 
-    /* Global search -> feeds bestiary + jumps to it */
+    /* Global search -> feeds bestiary + vanilla */
     var search = q("#globalSearch");
     search.addEventListener("input", function(){
       bestState.search = search.value.trim();
       renderMobGrid();
+      /* Also filter vanilla cards by search */
+      var term = search.value.trim().toLowerCase();
+      qa(".vi-card").forEach(function(card){
+        if(!term){ card.style.display = ""; return; }
+        var text = card.textContent.toLowerCase();
+        card.style.display = text.indexOf(term) !== -1 ? "" : "none";
+      });
     });
     search.addEventListener("keydown", function(e){
       if(e.key === "Enter"){ document.getElementById("bestiario").scrollIntoView({behavior:"smooth"}); }
