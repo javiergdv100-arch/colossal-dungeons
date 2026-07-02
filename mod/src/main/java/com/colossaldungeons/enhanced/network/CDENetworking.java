@@ -160,6 +160,30 @@ public class CDENetworking {
         public CustomPacketPayload.Type<DungeonEventPayload> type() { return TYPE; }
     }
 
+    /**
+     * Sent when a dialogue should open on the client - carries node data for the DialogueScreen.
+     * The server sends this when a player interacts with an NPC or advances dialogue.
+     */
+    public record OpenDialoguePayload(int npcEntityId, String nodeId, String speakerName,
+                                      String dialogueText, String choicesJson)
+            implements CustomPacketPayload {
+
+        public static final CustomPacketPayload.Type<OpenDialoguePayload> TYPE =
+            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(ColossalDungeons.MOD_ID, "open_dialogue"));
+
+        public static final StreamCodec<FriendlyByteBuf, OpenDialoguePayload> STREAM_CODEC =
+            StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, OpenDialoguePayload::npcEntityId,
+                ByteBufCodecs.STRING_UTF8, OpenDialoguePayload::nodeId,
+                ByteBufCodecs.STRING_UTF8, OpenDialoguePayload::speakerName,
+                ByteBufCodecs.STRING_UTF8, OpenDialoguePayload::dialogueText,
+                ByteBufCodecs.STRING_UTF8, OpenDialoguePayload::choicesJson,
+                OpenDialoguePayload::new);
+
+        @Override
+        public CustomPacketPayload.Type<OpenDialoguePayload> type() { return TYPE; }
+    }
+
     // ========== C2S (Client to Server) Payloads ==========
 
     /**
@@ -253,6 +277,7 @@ public class CDENetworking {
         reg.playToClient(PuzzleStatePayload.TYPE, PuzzleStatePayload.STREAM_CODEC, CDENetworking::handlePuzzleStateClient);
         reg.playToClient(ResonanceUpdatePayload.TYPE, ResonanceUpdatePayload.STREAM_CODEC, CDENetworking::handleResonanceClient);
         reg.playToClient(DungeonEventPayload.TYPE, DungeonEventPayload.STREAM_CODEC, CDENetworking::handleDungeonEventClient);
+        reg.playToClient(OpenDialoguePayload.TYPE, OpenDialoguePayload.STREAM_CODEC, CDENetworking::handleOpenDialogueClient);
 
         // C2S payloads
         reg.playToServer(MechanismActivatePayload.TYPE, MechanismActivatePayload.STREAM_CODEC, CDENetworking::handleMechServer);
@@ -305,6 +330,66 @@ public class CDENetworking {
         });
     }
 
+    private static void handleOpenDialogueClient(OpenDialoguePayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            // Client-side: open the dialogue screen with the received node data
+            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+            // Parse choices from JSON array string (simple comma-separated for choices)
+            java.util.List<String> choices = parseChoices(payload.choicesJson());
+            mc.setScreen(new com.colossaldungeons.enhanced.client.gui.DialogueScreen(
+                payload.npcEntityId(),
+                payload.nodeId(),
+                payload.speakerName(),
+                payload.dialogueText(),
+                choices
+            ));
+        });
+    }
+
+    /**
+     * Parses the choices JSON string into a list of choice texts.
+     * Format: JSON array of strings, e.g. ["choice1","choice2","choice3"]
+     */
+    private static java.util.List<String> parseChoices(String choicesJson) {
+        java.util.List<String> result = new java.util.ArrayList<>();
+        if (choicesJson == null || choicesJson.isBlank() || choicesJson.equals("[]")) {
+            return result;
+        }
+        // Simple JSON array parser for string arrays
+        String trimmed = choicesJson.trim();
+        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+            trimmed = trimmed.substring(1, trimmed.length() - 1);
+        }
+        // Split by comma, handling quoted strings
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+        boolean escaped = false;
+        for (int i = 0; i < trimmed.length(); i++) {
+            char c = trimmed.charAt(i);
+            if (escaped) {
+                current.append(c);
+                escaped = false;
+            } else if (c == '\\') {
+                escaped = true;
+            } else if (c == '"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                String val = current.toString().trim();
+                if (!val.isEmpty()) {
+                    result.add(val);
+                }
+                current = new StringBuilder();
+            } else {
+                current.append(c);
+            }
+        }
+        String last = current.toString().trim();
+        if (!last.isEmpty()) {
+            result.add(last);
+        }
+        return result;
+    }
+
     private static void handleMechServer(MechanismActivatePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             // Server-side: validate and process mechanism activation
@@ -314,6 +399,12 @@ public class CDENetworking {
     private static void handleDialogueServer(DialogueChoicePayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             // Server-side: process dialogue choice, advance conversation
+            if (context.player() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                net.minecraft.world.entity.Entity entity = serverPlayer.level().getEntity(payload.npcEntityId());
+                if (entity instanceof com.colossaldungeons.enhanced.entity.npc.NPCEntity npc) {
+                    npc.handleDialogueChoice(serverPlayer, payload.choiceIndex());
+                }
+            }
         });
     }
 

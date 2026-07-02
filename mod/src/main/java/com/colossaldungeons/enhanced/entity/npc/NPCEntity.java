@@ -126,8 +126,8 @@ public class NPCEntity extends CDEGeoEntity implements GeoEntity {
         // Record the interaction
         memory.recordVisit(player.getUUID(), startNode.id());
 
-        // In a full implementation, this would send a dialogue packet to the client
-        // to open the dialogue UI with the current node's text and choices
+        // Send dialogue open packet to the client
+        sendDialogueToClient(player, startNode);
     }
 
     /**
@@ -145,10 +145,44 @@ public class NPCEntity extends CDEGeoEntity implements GeoEntity {
         if (nextNode != null) {
             memory.recordVisit(player.getUUID(), nextNode.id());
             // Send next dialogue state to client
+            sendDialogueToClient(player, nextNode);
         } else {
             // Dialogue ended
             isTalking = false;
         }
+    }
+
+    /**
+     * Sends the dialogue node data to the client via network packet.
+     * Serializes the available choices as a JSON string array.
+     *
+     * @param player the player to send the dialogue to
+     * @param node the dialogue node to display
+     */
+    private void sendDialogueToClient(ServerPlayer player, DialogueNode node) {
+        // Build choices JSON - only include choices that pass their conditions
+        StringBuilder choicesJson = new StringBuilder("[");
+        boolean first = true;
+        for (DialogueChoice choice : node.choices()) {
+            if (choice.isAvailable(player)) {
+                if (!first) choicesJson.append(",");
+                // Escape quotes in choice text
+                String escaped = choice.text().replace("\\", "\\\\").replace("\"", "\\\"");
+                choicesJson.append("\"").append(escaped).append("\"");
+                first = false;
+            }
+        }
+        choicesJson.append("]");
+
+        net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player,
+            new com.colossaldungeons.enhanced.network.CDENetworking.OpenDialoguePayload(
+                this.getId(),
+                node.id(),
+                node.speakerName(),
+                node.text(),
+                choicesJson.toString()
+            )
+        );
     }
 
     @Override
