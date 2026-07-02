@@ -239,7 +239,7 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
 <tr><td><code>CDEBlocks</code></td><td><code>Block</code></td><td>~55</td><td><span class="tag">oil_surface</span><span class="tag">pushable_block</span><span class="tag">hidden_button</span><span class="tag">hydraulic_activator</span><span class="tag">mirror_panel</span><span class="tag">brazier_activable</span><span class="tag">resonance_crystal</span><span class="tag">trap_spike_plate</span><span class="tag">wall_maw_block</span><span class="tag">membrane_block</span><span class="tag">ice_plate</span><span class="tag">golden_mechanism</span><span class="tag">powder_snow_platform</span><span class="tag">nerve_fiber</span></td></tr>
 <tr><td><code>CDEItems</code></td><td><code>Item</code></td><td>~85</td><td><span class="tag tag-gold">counterweight_hammer</span><span class="tag tag-gold">surgeon_blade</span><span class="tag tag-gold">madness_rapier</span><span class="tag tag-gold">cycle_scepter</span><span class="tag tag-gold">noon_lance</span><span class="tag tag-gold">blizzard_bow</span><span class="tag tag-gold">mirror_shard</span><span class="tag tag-gold">escape_crystal</span><span class="tag tag-gold">sanity_candle</span><span class="tag tag-gold">windcutter_cloak</span><span class="tag tag-gold">oracle_relic</span><span class="tag tag-gold">frost_crown</span><span class="tag tag-gold">tempest_crown</span><span class="tag tag-gold">shatter_crown</span></td></tr>
 <tr><td><code>CDEEntities</code></td><td><code>EntityType&lt;?&gt;</code></td><td>~78</td><td><span class="tag tag-green">gelatinous_cube</span><span class="tag tag-green">mimic</span><span class="tag tag-green">neothelid_adult</span><span class="tag tag-green">shattered_sovereign</span><span class="tag tag-green">dying_atlas</span><span class="tag tag-green">sovereign_parasite</span><span class="tag tag-green">crowned_tempest</span><span class="tag tag-green">broken_sanity</span><span class="tag tag-green">primordial_concord</span><span class="tag tag-green">chained_helios</span><span class="tag tag-green">glass_harlequin</span><span class="tag tag-green">valdris</span></td></tr>
-<tr><td><code>CDEEffects</code></td><td><code>MobEffect</code></td><td>~18</td><td><span class="tag">oiled</span><span class="tag">madness</span><span class="tag">resonance_charge</span><span class="tag">hemorrhage</span><span class="tag">elemental_affinity</span><span class="tag">weight_encumbrance</span><span class="tag">solar_burn</span><span class="tag">frost_slow</span><span class="tag">parasitic_poison</span><span class="tag">sanity_drain</span></td></tr>
+<tr><td><code>CDEEffects</code></td><td><code>MobEffect</code></td><td>~18</td><td><span class="tag">oiled</span><span class="tag">oil_protection</span><span class="tag">madness</span><span class="tag">resonance_charge</span><span class="tag">hemorrhage</span><span class="tag">elemental_affinity</span><span class="tag">weight_encumbrance</span><span class="tag">solar_burn</span><span class="tag">frost_slow</span><span class="tag">parasitic_poison</span><span class="tag">sanity_drain</span></td></tr>
 <tr><td><code>CDESounds</code></td><td><code>SoundEvent</code></td><td>~120</td><td><span class="tag">trap_activate</span><span class="tag">room_enter</span><span class="tag">boss_phase_change</span><span class="tag">resonance_charge_up</span><span class="tag">oil_ignite</span><span class="tag">bone_meal_cleanse</span><span class="tag">mirror_shatter</span><span class="tag">heartbeat_loop</span><span class="tag">puzzle_complete</span></td></tr>
 <tr><td><code>CDEParticles</code></td><td><code>ParticleType&lt;?&gt;</code></td><td>~35</td><td><span class="tag">oil_drip</span><span class="tag">mercury_splash</span><span class="tag">solar_flare</span><span class="tag">frost_shard</span><span class="tag">bone_meal_cleanse_particle</span><span class="tag">resonance_wave</span><span class="tag">acid_bubble</span><span class="tag">spectral_wisp</span></td></tr>
 <tr><td><code>CDEAttachments</code></td><td><code>AttachmentType&lt;?&gt;</code></td><td>~8</td><td><span class="tag tag-gold">dungeon_progress</span><span class="tag tag-gold">room_state</span><span class="tag tag-gold">player_reputation</span><span class="tag tag-gold">companion_data</span><span class="tag tag-gold">resonance_level</span><span class="tag tag-gold">oil_status</span><span class="tag tag-gold">madness_level</span><span class="tag tag-gold">vanilla_interaction_cooldown</span></td></tr>
@@ -368,7 +368,6 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
 <span class="kw">import</span> net.neoforged.bus.api.IEventBus;
 <span class="kw">import</span> net.neoforged.fml.common.Mod;
 <span class="kw">import</span> net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-<span class="kw">import</span> net.neoforged.neoforge.common.NeoForge;
 <span class="kw">import</span> org.slf4j.Logger;
 <span class="kw">import</span> org.slf4j.LoggerFactory;
 
@@ -395,10 +394,9 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
         modBus.addListener(<span class="kw">this</span>::onCommonSetup);
         modBus.addListener(<span class="type">CDENetworking</span>::registerPayloads);
 
-        <span class="cmt">// Game bus listeners (gameplay events)</span>
-        <span class="type">NeoForge</span>.EVENT_BUS.register(<span class="kw">new</span> <span class="type">VanillaInteractionHandler</span>());
-        <span class="type">NeoForge</span>.EVENT_BUS.register(<span class="kw">new</span> <span class="type">DungeonEventHandler</span>());
-        <span class="type">NeoForge</span>.EVENT_BUS.register(<span class="kw">new</span> <span class="type">CombatEventHandler</span>());
+        <span class="cmt">// Game bus: handlers registrados via @EventBusSubscriber (ver ejemplo abajo)</span>
+        <span class="cmt">// VanillaInteractionHandler, DungeonEventHandler, CombatEventHandler</span>
+        <span class="cmt">// usan @EventBusSubscriber(modid = MOD_ID, bus = Bus.GAME)</span>
     }
 
     <span class="kw">private void</span> onCommonSetup(<span class="type">FMLCommonSetupEvent</span> event) {
@@ -699,6 +697,7 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
 <pre>
 <span class="kw">package</span> com.colossaldungeons.enhanced.vanilla;
 
+<span class="kw">import</span> com.colossaldungeons.enhanced.ColossalDungeons;
 <span class="kw">import</span> com.colossaldungeons.enhanced.core.registry.CDEAttachments;
 <span class="kw">import</span> com.colossaldungeons.enhanced.dungeon.DungeonManager;
 <span class="kw">import</span> net.minecraft.core.BlockPos;
@@ -709,11 +708,13 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
 <span class="kw">import</span> net.neoforged.bus.api.SubscribeEvent;
 <span class="kw">import</span> net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 <span class="kw">import</span> net.neoforged.neoforge.common.NeoForge;
+<span class="kw">import</span> net.neoforged.fml.common.EventBusSubscriber;
 
+<span class="ann">@EventBusSubscriber</span>(modid = <span class="type">ColossalDungeons</span>.MOD_ID, bus = <span class="type">EventBusSubscriber.Bus</span>.GAME)
 <span class="kw">public class</span> <span class="type">VanillaInteractionHandler</span> {
 
     <span class="ann">@SubscribeEvent</span>
-    <span class="kw">public void</span> onRightClickBlock(<span class="type">PlayerInteractEvent.RightClickBlock</span> event) {
+    <span class="kw">public static void</span> onRightClickBlock(<span class="type">PlayerInteractEvent.RightClickBlock</span> event) {
         <span class="kw">if</span> (event.getLevel().isClientSide()) <span class="kw">return</span>;
 
         <span class="type">ServerPlayer</span> player = (<span class="type">ServerPlayer</span>) event.getEntity();
@@ -1098,7 +1099,8 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
         <span class="kw">if</span> (!ctx.stack().is(<span class="type">Items</span>.BONE_MEAL)) <span class="kw">return false</span>;
         <span class="kw">boolean</span> isOilBlock = ctx.blockState() != <span class="kw">null</span>
             && ctx.blockState().getBlock() <span class="kw">instanceof</span> <span class="type">OilSurfaceBlock</span>;
-        <span class="kw">boolean</span> playerOiled = ctx.player().hasEffect(<span class="type">CDEEffects</span>.OILED.get());
+        <span class="cmt">// DeferredHolder implements Holder&lt;MobEffect&gt; - no .get() needed in 1.21.1</span>
+        <span class="kw">boolean</span> playerOiled = ctx.player().hasEffect(<span class="type">CDEEffects</span>.OILED);
         <span class="kw">return</span> isOilBlock || (ctx.player().isShiftKeyDown() && playerOiled);
     }
 
@@ -1112,11 +1114,11 @@ details .detail-content{border:1px solid var(--line);border-top:none;border-radi
             level.removeBlock(ctx.pos(), <span class="kw">false</span>);
 
         <span class="cmt">// Limpiar efecto del jugador</span>
-        player.removeEffect(<span class="type">CDEEffects</span>.OILED.get());
+        player.removeEffect(<span class="type">CDEEffects</span>.OILED);
 
         <span class="cmt">// Proteccion 30 minutos</span>
         player.addEffect(<span class="kw">new</span> <span class="type">MobEffectInstance</span>(
-            <span class="type">CDEEffects</span>.OIL_PROTECTION.get(), PROTECTION_TICKS, <span class="num">0</span>, <span class="kw">false</span>, <span class="kw">true</span>, <span class="kw">true</span>));
+            <span class="type">CDEEffects</span>.OIL_PROTECTION, PROTECTION_TICKS, <span class="num">0</span>, <span class="kw">false</span>, <span class="kw">true</span>, <span class="kw">true</span>));
 
         <span class="cmt">// Feedback: sonido + VFX</span>
         level.playSound(<span class="kw">null</span>, player.blockPosition(),
