@@ -1,0 +1,24 @@
+{
+  "type": "spike_plate",
+  "activator": {
+    "type": "pressure",
+    "range": 1.5,
+    "delay": 10
+  },
+  "damage": {
+    "amount": 6.0,
+    "type": "generic",
+    "radius": 1.5,
+    "effects": ["slowness"]
+  },
+  "timing": {
+    "warning_ticks": 15,
+    "active_ticks": 30,
+    "retract_ticks": 20
+  },
+  "vanilla_interactions": ["bone_meal_disable", "water_slow"],
+  "chain_reactions": [],
+  "vfx_id": "colossal_dungeons_enhanced:spike_emerge",
+  "repeatable": true,
+  "cooldown_ticks": 80
+}

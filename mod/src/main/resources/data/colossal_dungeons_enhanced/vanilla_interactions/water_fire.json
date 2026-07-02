@@ -1,0 +1,11 @@
+{
+  "item": "minecraft:water_bucket",
+  "target_block": "colossal_dungeons_enhanced:flame_jet_block",
+  "effect": "extinguish",
+  "description": "Water extinguishes flame jets temporarily, creating a safe passage window",
+  "consumes_item": false,
+  "cooldown_ticks": 100,
+  "particle_effect": "colossal_dungeons_enhanced:water_extinguish",
+  "sound_event": "minecraft:block.fire.extinguish",
+  "conditions": ["in_dungeon", "trap_active"]
+}

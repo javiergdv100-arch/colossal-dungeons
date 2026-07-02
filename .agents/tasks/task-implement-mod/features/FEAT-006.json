@@ -1,0 +1,51 @@
+{
+  "id": "FEAT-006",
+  "type": "feat",
+  "description": "Implement the Effects system (MobEffects), Block implementations (OilSurfaceBlock, trap blocks, mechanism blocks, puzzle blocks), custom Items with abilities, and Curios API integration for accessories.",
+  "status": "completed",
+  "steps": [
+    "Create OiledEffect.java in effect/ extending MobEffect: fire damage 2x multiplier, friction reduction -30% per level, visual overlay sync, propagation on player contact, tick logic.",
+    "Create OilProtectionEffect.java in effect/ extending MobEffect: prevents OiledEffect application for duration, visual golden particles.",
+    "Create MadnessEffect.java in effect/: shader distortion trigger, false sound events, scale with level (0-100).",
+    "Create ResonanceChargeEffect.java in effect/: sound sensitivity increase, crystal interaction boost.",
+    "Create HemorrhageEffect.java in effect/: DOT (damage over time), stacking.",
+    "Create FrostSlowEffect.java in effect/: movement slow, vision reduction.",
+    "Create SolarBurnEffect.java in effect/: continuous burn in light, cure in shadow.",
+    "Create SanityDrainEffect.java in effect/: gradual madness buildup, cure with candle/food.",
+    "Create OilSurfaceBlock.java in block/: no collision (carpet-like), ignitedByLava, onSteppedOn applies OiledEffect, bone meal interaction destroys block, water interaction creates steam explosion.",
+    "Create SpikePlateBlock.java in block/trap/: extends Block with blockstate for extended/retracted, damages on step, visual animation state property.",
+    "Create ResonanceCrystalBlock.java in block/puzzle/ with CHARGE_LEVEL IntegerProperty (0-5), light level based on charge, BlockEntity reference.",
+    "Create HiddenButtonBlock.java in block/puzzle/: invisible until revealed by spyglass/sculk, standard button behavior once visible.",
+    "Create BrazierBlock.java in block/mechanism/: lit/unlit state, ignitable by flint and steel, provides light when lit.",
+    "Create MirrorPanelBlock.java in block/puzzle/: directional, rotatable by fishing rod, redirects light beams.",
+    "Create PushableBlock.java in block/mechanism/: can be pushed by players and pistons, used in weight puzzles.",
+    "Create GoldenMechanismBlock.java in block/mechanism/: activated by gold items, triggers mechanism chain.",
+    "Create IcePlateBlock.java in block/: slippery surface, honey bottle interaction removes slip.",
+    "Create MembraneBlock.java in block/: semi-permeable, certain entities can pass through.",
+    "Create CDEWeaponItem.java base class in item/: custom weapons with ability on right-click.",
+    "Create concrete weapons: CounterweightHammer.java (slam AoE), SurgeonBlade.java (precision strikes, hemorrhage), MadnessRapier.java (madness on hit), BlizzardBow.java (frost arrows).",
+    "Create FrostCrownItem.java in item/curio/ following section 7.11 exactly: ICurioItem, frost immunity aura, cold damage to nearby enemies every 20 ticks.",
+    "Create OracleRelicItem.java in item/curio/: ICurioItem, reveals hidden buttons and trap positions.",
+    "Create WindcutterCloakItem.java in item/curio/: ICurioItem, increased movement speed and fall damage reduction.",
+    "Create SanityCandle.java in item/: consumable, removes SanityDrain and Madness effects.",
+    "Create EscapeCrystal.java in item/: teleports player to dungeon entrance, single use."
+  ],
+  "acceptance_criteria": [
+    "All 8+ MobEffect implementations have proper tick logic and Holder references",
+    "OilSurfaceBlock implements onSteppedOn for OiledEffect, handles bone meal and water interactions",
+    "ResonanceCrystalBlock has CHARGE_LEVEL property affecting light level",
+    "All trap/mechanism/puzzle blocks have appropriate BlockState properties",
+    "CDEWeaponItem base provides right-click ability framework",
+    "At least 4 concrete weapons with unique abilities",
+    "FrostCrownItem exactly matches section 7.11 ICurioItem pattern",
+    "At least 3 Curios items with curioTick, onEquip, onUnequip implementations"
+  ],
+  "verification": [
+    "OiledEffect.applyEffectTick increases fire damage and reduces friction",
+    "OilSurfaceBlock.onSteppedOn checks for OilProtection before applying OiledEffect",
+    "FrostCrownItem.curioTick applies frost slow to enemies in radius every 20 ticks",
+    "All block/item classes reference correct registry entries from CDEBlocks/CDEItems"
+  ],
+  "blocked_reason": null,
+  "findings": "All 33 files (32 new + 1 modified CDEEffects.java) successfully created. 9 MobEffect implementations, 12 block implementations, 5 item classes (CDEWeaponItem base + 4 weapons), 3 curio items, 2 utility items. Internal cross-references verified - all imports between mod files resolve correctly. Package declarations match filesystem paths. Braces balanced. CDEBlocks/CDEItems NOT modified per orchestrator constraint - the registry still creates generic Block/Item instances that will need updating to reference the new implementation classes in a separate step. NeoForge 1.21.1 API patterns used: applyEffectTick(ServerLevel, LivingEntity, int), ItemStack.hurtAndBreak(int, LivingEntity, EquipmentSlot), DeferredHolder as Holder<MobEffect> in MobEffectInstance constructors. Cannot verify full compilation due to INTEGRATIONS_ONLY network mode."
+}

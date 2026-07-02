@@ -1,0 +1,96 @@
+{
+  "id": "colossal_dungeons_enhanced:descent_into_madness",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:descent_into_madness/el_umbral",
+      "name": "El Umbral",
+      "type": "entrance",
+      "size_x": 12,
+      "size_y": 6,
+      "size_z": 12
+    },
+    {
+      "id": "colossal_dungeons_enhanced:descent_into_madness/los_pasillos_que_repiten",
+      "name": "Los Pasillos que Repiten",
+      "type": "corridor",
+      "size_x": 8,
+      "size_y": 6,
+      "size_z": 48
+    },
+    {
+      "id": "colossal_dungeons_enhanced:descent_into_madness/la_galeria_de_recuerdos",
+      "name": "La Galeria de Recuerdos",
+      "type": "puzzle",
+      "size_x": 20,
+      "size_y": 8,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:descent_into_madness/el_coro",
+      "name": "El Coro",
+      "type": "miniboss",
+      "size_x": 18,
+      "size_y": 10,
+      "size_z": 18
+    },
+    {
+      "id": "colossal_dungeons_enhanced:descent_into_madness/el_fondo",
+      "name": "El Fondo",
+      "type": "boss",
+      "size_x": 26,
+      "size_y": 12,
+      "size_z": 26
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:descent_into_madness/el_umbral",
+      "to_room": "colossal_dungeons_enhanced:descent_into_madness/los_pasillos_que_repiten",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:descent_into_madness/los_pasillos_que_repiten",
+      "to_room": "colossal_dungeons_enhanced:descent_into_madness/la_galeria_de_recuerdos",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:descent_into_madness/la_galeria_de_recuerdos",
+      "to_room": "colossal_dungeons_enhanced:descent_into_madness/el_coro",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:descent_into_madness/el_coro",
+      "to_room": "colossal_dungeons_enhanced:descent_into_madness/el_fondo",
+      "type": "sealed_door",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": false,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": false
+  },
+  "vanilla_items": [
+    "minecraft:milk_bucket",
+    "minecraft:torch",
+    "minecraft:recovery_compass",
+    "minecraft:spyglass",
+    "minecraft:snowball",
+    "minecraft:note_block",
+    "minecraft:bread",
+    "minecraft:sculk_sensor"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:broken_sanity",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Implement all Veiled Peak (9) and Descent into Madness (9) creatures. Total: 18 entity classes.",
+  "status": "completed",
+  "steps": [
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/VeiledSoulEntity.java - 18HP, 5 dmg. Ghost climber invisible in blizzard, materializes to attack. Light from beacons reveals it.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/PetrifiedClimberEntity.java - 30HP, 5 armor, 6 dmg. Frozen reanimated adventurer, resistant to cold, fragile to heat/fire. Wall-climbing AI.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/ZephyrWispEntity.java - 14HP, 3 dmg + strong knockback. Wind elemental that pushes toward void. Erratic fast movement. Shield is perfect counter.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/FogBellringerEntity.java - 26HP, 2 armor, 5 dmg. Spectral monk that rings bell to summon fog and allies. Breaking bell disarms it.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/SpectralYakEntity.java - 44HP, 3 armor, 9 dmg charge. Ghostly mountain beast with telegraphed line charge. Stunned if misses and hits wall.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/VeilWardenEntity.java - 120HP elite, 5 armor, 11 dmg. Invisible in fog, only visible under beacon light. Ambush AI. Extinguishes beacons to regain advantage.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/FrozenOracleEntity.java - 130HP elite, 4 armor, frost 10 dmg. Ice seer that freezes floor, applies slowness/fear debuffs. Vulnerable while prophesying.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/SummitKeeperEntity.java - 340HP miniboss, 7 armor, 13 dmg. Ice/wind colossus controlling arena wind, triggers avalanches. Fire breaks ice shell.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/CrownedTempestEntity.java - 1250HP boss, 5 armor, 14-20 dmg + lightning. 3-phase living storm. Phase 1: wind gusts + ice shards. Phase 2: fog invisibility + thunder guidance. Phase 3: lightning zones + total blizzard. Beacons expose it. Implement IBossPhase.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/TheWhispererEntity.java - 20HP, 6 dmg. Invisible presence detectable only by whispers from false direction. Guides to traps.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/FacelessPilgrimEntity.java - 24HP, 1 armor, 6 dmg. Copies appearance of players/NPCs, blends in until attacking. Reveals empty face on death.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/TheCrowdEntity.java - 6HP each swarm, 3 dmg. Mass of hands/shadows from dark surfaces that grab and slow. Light eliminates spawning surfaces.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/RottenMemoryEntity.java - 28HP, 7 dmg + nausea. Distorted recreation of known ally that mutates when approached. Dissipates if ignored.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/HollowFencerEntity.java - Agile rare with fast rapier, light armor. Headless corpse controlled by chest parasite that mimics human voices. Punzada rapida + Rafaga attacks, parry stance, fatigue cycle, interruptible healing.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/ChoirOfCriesEntity.java - 100HP elite, 2 armor, sonic 9 dmg. Mass of mouths emitting overlapping cries, attracts mobs from other rooms. Sonic AoE attacks.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/TheOneWhoRepeatsEntity.java - 140HP elite, 3 armor, 10 dmg. Linked to room loop mechanic - forces room resets. Each repetition changes a detail (the clue).",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/SemblanceEntity.java - 280HP miniboss, 4 armor, 12 dmg. Living mirror of player's worst decisions, learns and repeats attack patterns. Vulnerable when player breaks routine.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/BrokenSanityEntity.java - 1400HP boss, 5 armor, 15-22 dmg. 3-phase madness personification. Phase 1: false clones. Phase 2: distorted room + voices guide to traps. Phase 3: inverted controls + hostile memories. Implement IBossPhase."
+  ],
+  "acceptance_criteria": [
+    "All 18 entity Java files compile with valid Java 21 syntax",
+    "Each extends CDEGeoEntity, implements GeoEntity, has createAttributes()",
+    "Boss entities implement IBossPhase with proper phase management",
+    "AI behaviors appropriate to each creature's complexity and role"
+  ],
+  "verification": [
+    "All 18 files exist in correct packages",
+    "Package declarations and imports are correct",
+    "Stats match data.js specifications"
+  ],
+  "blocked_reason": null,
+  "findings": "All 18 entity classes created successfully. Each extends CDEGeoEntity, implements GeoEntity, has static createAttributes() with exact stats. Boss entities (SummitKeeperEntity, CrownedTempestEntity, SemblanceEntity, BrokenSanityEntity) implement IBossPhase with BossPhaseManager and proper phase transitions. All entities registered in CDEEntities.java. Braces balanced in all files. No network access needed - structural validation only. Unused imports cleaned from VeiledSoulEntity and FrozenOracleEntity fixed (missing Vec3 import added, stray Vec3_ZERO removed)."
+}

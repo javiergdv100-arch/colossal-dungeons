@@ -1,0 +1,11 @@
+{
+  "item": "minecraft:bone_meal",
+  "target_block": "colossal_dungeons_enhanced:oil_surface",
+  "effect": "cleanse",
+  "description": "Bone meal neutralizes oil surfaces, making them safe to traverse",
+  "consumes_item": true,
+  "cooldown_ticks": 20,
+  "particle_effect": "colossal_dungeons_enhanced:bone_meal_cleanse",
+  "sound_event": "colossal_dungeons_enhanced:interaction.cleanse",
+  "conditions": ["in_dungeon"]
+}

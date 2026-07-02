@@ -1,0 +1,94 @@
+{
+  "id": "colossal_dungeons_enhanced:the_worldbearer",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:worldbearer/entrance",
+      "name": "Entrance Hall",
+      "type": "entrance",
+      "size_x": 16,
+      "size_y": 8,
+      "size_z": 24
+    },
+    {
+      "id": "colossal_dungeons_enhanced:worldbearer/trap_corridor",
+      "name": "Trap Corridor",
+      "type": "corridor",
+      "size_x": 8,
+      "size_y": 6,
+      "size_z": 32
+    },
+    {
+      "id": "colossal_dungeons_enhanced:worldbearer/puzzle_chamber",
+      "name": "Puzzle Chamber",
+      "type": "puzzle",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:worldbearer/boss_arena",
+      "name": "Worldbearer Arena",
+      "type": "boss",
+      "size_x": 32,
+      "size_y": 16,
+      "size_z": 32
+    },
+    {
+      "id": "colossal_dungeons_enhanced:worldbearer/treasure_vault",
+      "name": "Treasure Vault",
+      "type": "reward",
+      "size_x": 12,
+      "size_y": 8,
+      "size_z": 12
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:worldbearer/entrance",
+      "to_room": "colossal_dungeons_enhanced:worldbearer/trap_corridor",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:worldbearer/trap_corridor",
+      "to_room": "colossal_dungeons_enhanced:worldbearer/puzzle_chamber",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:worldbearer/puzzle_chamber",
+      "to_room": "colossal_dungeons_enhanced:worldbearer/boss_arena",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:worldbearer/boss_arena",
+      "to_room": "colossal_dungeons_enhanced:worldbearer/treasure_vault",
+      "type": "portal",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": true,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": true
+  },
+  "vanilla_items": [
+    "minecraft:bone_meal",
+    "minecraft:water_bucket",
+    "minecraft:honey_bottle",
+    "minecraft:fishing_rod",
+    "minecraft:torch",
+    "minecraft:powder_snow_bucket"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:worldbearer_titan",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}

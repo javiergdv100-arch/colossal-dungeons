@@ -1,0 +1,96 @@
+{
+  "id": "colossal_dungeons_enhanced:veiled_peak",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:veiled_peak/el_sendero_bajo",
+      "name": "El Sendero Bajo",
+      "type": "entrance",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 30
+    },
+    {
+      "id": "colossal_dungeons_enhanced:veiled_peak/los_puentes_de_cuerda",
+      "name": "Los Puentes de Cuerda",
+      "type": "corridor",
+      "size_x": 10,
+      "size_y": 20,
+      "size_z": 40
+    },
+    {
+      "id": "colossal_dungeons_enhanced:veiled_peak/el_templo_de_los_faros",
+      "name": "El Templo de los Faros",
+      "type": "puzzle",
+      "size_x": 20,
+      "size_y": 12,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:veiled_peak/la_cornisa_del_oraculo",
+      "name": "La Cornisa del Oraculo",
+      "type": "miniboss",
+      "size_x": 22,
+      "size_y": 14,
+      "size_z": 22
+    },
+    {
+      "id": "colossal_dungeons_enhanced:veiled_peak/la_cima_coronada",
+      "name": "La Cima Coronada",
+      "type": "boss",
+      "size_x": 30,
+      "size_y": 20,
+      "size_z": 30
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:veiled_peak/el_sendero_bajo",
+      "to_room": "colossal_dungeons_enhanced:veiled_peak/los_puentes_de_cuerda",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:veiled_peak/los_puentes_de_cuerda",
+      "to_room": "colossal_dungeons_enhanced:veiled_peak/el_templo_de_los_faros",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:veiled_peak/el_templo_de_los_faros",
+      "to_room": "colossal_dungeons_enhanced:veiled_peak/la_cornisa_del_oraculo",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:veiled_peak/la_cornisa_del_oraculo",
+      "to_room": "colossal_dungeons_enhanced:veiled_peak/la_cima_coronada",
+      "type": "sealed_door",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": true,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": true
+  },
+  "vanilla_items": [
+    "minecraft:honey_bottle",
+    "minecraft:powder_snow_bucket",
+    "minecraft:snowball",
+    "minecraft:shield",
+    "minecraft:flint_and_steel",
+    "minecraft:spyglass",
+    "minecraft:torch",
+    "minecraft:lava_bucket"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:crowned_tempest",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}
