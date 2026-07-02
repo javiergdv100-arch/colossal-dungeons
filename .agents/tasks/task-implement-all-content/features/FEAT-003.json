@@ -2,7 +2,7 @@
   "id": "FEAT-003",
   "type": "feat",
   "description": "Implement all Veiled Peak (9) and Descent into Madness (9) creatures. Total: 18 entity classes.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/VeiledSoulEntity.java - 18HP, 5 dmg. Ghost climber invisible in blizzard, materializes to attack. Light from beacons reveals it.",
     "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/PetrifiedClimberEntity.java - 30HP, 5 armor, 6 dmg. Frozen reanimated adventurer, resistant to cold, fragile to heat/fire. Wall-climbing AI.",
@@ -35,5 +35,5 @@
     "Stats match data.js specifications"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All 18 entity classes created successfully. Each extends CDEGeoEntity, implements GeoEntity, has static createAttributes() with exact stats. Boss entities (SummitKeeperEntity, CrownedTempestEntity, SemblanceEntity, BrokenSanityEntity) implement IBossPhase with BossPhaseManager and proper phase transitions. All entities registered in CDEEntities.java. Braces balanced in all files. No network access needed - structural validation only. Unused imports cleaned from VeiledSoulEntity and FrozenOracleEntity fixed (missing Vec3 import added, stray Vec3_ZERO removed)."
 }
