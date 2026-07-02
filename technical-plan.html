@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colossal Dungeons Enhanced - Plan Tecnico de Implementacion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0b0e;--bg-2:#0e1015;--surface:#13161d;--surface-2:#181c25;--line:#242a36;--line-soft:#1c212b;--text:#e8eaf0;--text-dim:#a2a9b8;--text-mute:#6d7585;--gold:#d8b26a;--gold-soft:#e7cd97;--accent:#8fb7c9;--green:#7ec89f;--orange:#e8a855;--purple:#c4a0e8;--red:#e87070;--radius:16px;--radius-sm:10px;--sidew:280px;--ease:cubic-bezier(.22,.61,.36,1);--shadow:0 24px 60px -24px rgba(0,0,0,.7)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4,h5{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.2;letter-spacing:-.01em}
+h1{font-size:2.4rem;color:var(--gold)}h2{font-size:1.8rem;color:var(--gold);margin:2.5rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+h3{font-size:1.3rem;color:var(--accent);margin:1.8rem 0 .8rem}h4{font-size:1.1rem;color:var(--text);margin:1.2rem 0 .5rem}
+h5{font-size:1rem;color:var(--text-dim);margin:1rem 0 .4rem}p{margin:.6rem 0;color:var(--text-dim)}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}::selection{background:rgba(216,178,106,.28)}
+strong{color:var(--text);font-weight:600}em{color:var(--gold-soft)}
+ul,ol{margin:.5rem 0 .5rem 1.5rem;color:var(--text-dim)}li{margin:.3rem 0}li strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.88rem}
+th{background:var(--surface-2);color:var(--gold);text-align:left;padding:.6rem .8rem;border:1px solid var(--line);font-weight:600}
+td{padding:.5rem .8rem;border:1px solid var(--line);color:var(--text-dim);vertical-align:top}
+tr:nth-child(even) td{background:rgba(19,22,29,.5)}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:var(--surface-2);padding:.15em .4em;border-radius:4px;color:var(--accent)}
+.sidebar{position:fixed;top:0;left:0;z-index:40;width:var(--sidew);height:100vh;background:linear-gradient(180deg,var(--bg-2),var(--bg));border-right:1px solid var(--line);overflow-y:auto;padding:1.5rem 1rem;transition:transform .3s var(--ease)}
+.sidebar h2{font-size:1rem;color:var(--gold);border:none;margin:0 0 1rem;padding:0}
+.sidebar a{display:block;padding:.4rem .6rem;margin:.15rem 0;border-radius:6px;font-size:.82rem;color:var(--text-dim);transition:all .2s}
+.sidebar a:hover,.sidebar a.active{background:var(--surface);color:var(--gold);text-decoration:none}
+.sidebar .sub{padding-left:1rem;font-size:.78rem}
+.main{margin-left:var(--sidew);padding:2.5rem 3rem 4rem;max-width:960px}
+pre{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:1.2rem 1.4rem;overflow-x:auto;margin:1rem 0 1.5rem;font-size:.82rem;line-height:1.6;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace}
+.kw{color:var(--gold)}.str{color:var(--green)}.cmt{color:var(--text-mute);font-style:italic}.ann{color:var(--accent)}.num{color:var(--orange)}.type{color:var(--purple)}.fn{color:#82c8e8}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:1.2rem 1.4rem;margin:1rem 0}.card h4{margin-top:0;color:var(--gold)}
+.state-diagram{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:1.5rem;margin:1rem 0;font-family:monospace;font-size:.8rem;line-height:1.6;white-space:pre;overflow-x:auto;color:var(--text-dim)}
+.tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;margin:.15rem .2rem;background:var(--surface-2);color:var(--accent);border:1px solid var(--line)}
+.tag-gold{color:var(--gold);border-color:rgba(216,178,106,.3)}.tag-green{color:var(--green);border-color:rgba(126,200,159,.3)}
+.menu-toggle{display:none;position:fixed;top:1rem;left:1rem;z-index:50;background:var(--surface);border:1px solid var(--line);color:var(--gold);padding:.5rem .8rem;border-radius:8px;cursor:pointer;font-size:1.2rem}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:1.5rem 1.2rem}.menu-toggle{display:block}pre{font-size:.75rem;padding:.8rem 1rem}}
+details{margin:.5rem 0}details summary{cursor:pointer;padding:.4rem .6rem;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:.88rem;font-weight:500}
+details summary:hover{background:var(--surface);color:var(--gold)}details[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none;color:var(--gold)}
+details .detail-content{border:1px solid var(--line);border-top:none;border-radius:0 0 6px 6px;padding:1rem}
+.section-num{color:var(--gold);font-weight:700;margin-right:.5rem}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.json-schema{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:1rem 1.2rem;margin:.8rem 0;font-size:.82rem;font-family:monospace;white-space:pre-wrap}
+.json-key{color:var(--accent)}.json-type{color:var(--purple)}.json-desc{color:var(--text-mute)}
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<nav class="sidebar">
+<h2>&#9776; Plan Tecnico CDE</h2>
+<a href="#overview">1. Vision General</a>
+<a href="#architecture">2. Arquitectura</a>
+<a href="#packages">3. Estructura de Paquetes</a>
+<a href="#registries">4. Registries</a>
+<a href="#systems">5. Sistemas Core</a>
+<a href="#systems-dungeon" class="sub">5.1 Dungeon State Machine</a>
+<a href="#systems-room" class="sub">5.2 Room Activation</a>
+<a href="#systems-trap" class="sub">5.3 Trap Framework</a>
+<a href="#systems-puzzle" class="sub">5.4 Puzzle Engine</a>
+<a href="#systems-mechanism" class="sub">5.5 Mechanism System</a>
+<a href="#systems-vanilla" class="sub">5.6 Vanilla Interactions</a>
+<a href="#systems-resonance" class="sub">5.7 Resonance System</a>
+<a href="#systems-combat" class="sub">5.8 Combat System</a>
+<a href="#systems-vfx" class="sub">5.9 VFX System</a>
+<a href="#systems-dialogue" class="sub">5.10 Dialogue/NPC</a>
+<a href="#systems-companion" class="sub">5.11 Companion System</a>
+<a href="#systems-addon" class="sub">5.12 Addon API</a>
+<a href="#apis">6. Integracion de APIs</a>
+<a href="#api-geckolib" class="sub">6.1 GeckoLib 4.x</a>
+<a href="#api-aaa" class="sub">6.2 AAA Particles</a>
+<a href="#api-smartbrain" class="sub">6.3 SmartBrainLib</a>
+<a href="#api-curios" class="sub">6.4 Curios API</a>
+<a href="#api-neoforge" class="sub">6.5 NeoForge Systems</a>
+<a href="#code-examples">7. Ejemplos de Codigo</a>
+<a href="#code-mod-class" class="sub">7.1 Clase Principal</a>
+<a href="#code-registries" class="sub">7.2 DeferredRegister</a>
+<a href="#code-attachments" class="sub">7.3 AttachmentTypes</a>
+<a href="#code-entity" class="sub">7.4 GeoEntity</a>
+<a href="#code-animation" class="sub">7.5 AnimationController</a>
+<a href="#code-trap" class="sub">7.6 AbstractTrap</a>
+<a href="#code-vanilla" class="sub">7.7 VanillaInteraction</a>
+<a href="#code-network" class="sub">7.8 Network Payload</a>
+<a href="#code-dungeon" class="sub">7.9 DungeonManager</a>
+<a href="#code-brain" class="sub">7.10 SmartBrainLib AI</a>
+<a href="#code-curios" class="sub">7.11 Curios Item</a>
+<a href="#code-particles" class="sub">7.12 AAA Particles</a>
+<a href="#code-datadriven" class="sub">7.13 Data-Driven Loader</a>
+<a href="#code-oil" class="sub">7.14 Oil Mechanic</a>
+<a href="#networking">8. Protocolo de Red</a>
+<a href="#datadriven">9. Sistema Data-Driven</a>
+<a href="#effects">10. Sistema de Efectos</a>
+<a href="#oil-mechanic">11. Mecanica del Aceite</a>
+<a href="#room-states">12. Room State Machine</a>
+<a href="#vanilla-system">13. Items Vanilla</a>
+<a href="#framework">14. Framework</a>
+</nav>
+<main class="main">
+<h1>Colossal Dungeons Enhanced</h1>
+<p style="font-size:1.1rem;color:var(--text);margin-bottom:.3rem">Plan Tecnico de Implementacion Completo</p>
+<p style="color:var(--text-mute);font-size:.9rem">NeoForge 1.21.1 &bull; Java 21 &bull; Mojang Official Mappings &bull; Mod ID: <code>colossal_dungeons_enhanced</code></p>
+<hr style="border:none;border-top:1px solid var(--line);margin:1.5rem 0">
+<section id="overview">
+<h2><span class="section-num">1.</span> Vision General</h2>
+<p><strong>Colossal Dungeons Enhanced</strong> es un mod de mazmorras para Minecraft 1.21.1 (NeoForge) que transforma la experiencia de exploracion. Cada dungeon es una estructura masiva con decenas de salas interconectadas, trampas mecanicas, puzles ambientales y jefes con fases multiples.</p>
+<div class="card">
+<h4>Principios Fundamentales</h4>
+<ul>
+<li><strong>Vanilla-first:</strong> Los items vanilla de Minecraft siempre tienen uso en las dungeons. Polvo de hueso limpia aceite, miel da inmunidad al hielo, cubos de nieve crean plataformas temporales.</li>
+<li><strong>Data-driven:</strong> Todo el contenido (trampas, puzles, criaturas, rooms) se define via JSON. Addons y datapacks pueden extender sin tocar codigo.</li>
+<li><strong>Performance-oriented:</strong> Solo 1-3 salas activas simultaneamente. Salas inactivas suspenden AI, tick de BlockEntities y rendering de VFX.</li>
+<li><strong>Event-driven:</strong> Comunicacion entre sistemas via NeoForge Event Bus. Desacoplamiento total entre modulos.</li>
+<li><strong>Composicion sobre herencia:</strong> Interfaces y composicion de comportamientos en lugar de jerarquias profundas.</li>
+<li><strong>API publica:</strong> Framework extensible para que otros mods puedan anadir dungeons, criaturas y mecanicas.</li>
+</ul>
+</div>
+<div class="card">
+<h4>Stack Tecnologico</h4>
+<table>
+<tr><th>Componente</th><th>Version/Detalle</th></tr>
+<tr><td>Minecraft</td><td>1.21.1</td></tr>
+<tr><td>Mod Loader</td><td>NeoForge (ultima estable para 1.21.1)</td></tr>
+<tr><td>Java</td><td>21 (records, sealed classes, pattern matching)</td></tr>
+<tr><td>Mappings</td><td>Mojang Official (NO MCP, NO Yarn)</td></tr>
+<tr><td>Animaciones</td><td>GeckoLib 4.x</td></tr>
+<tr><td>Particulas</td><td>AAA Particles (Effekseer)</td></tr>
+<tr><td>AI Avanzada</td><td>SmartBrainLib (Brain API wrapper)</td></tr>
+<tr><td>Equipamiento</td><td>Curios API (slots: amulet, ring, belt, relic)</td></tr>
+<tr><td>Build System</td><td>Gradle + NeoGradle</td></tr>
+<tr><td>Data Storage</td><td>NeoForge AttachmentTypes (NO old Capabilities)</td></tr>
+<tr><td>Networking</td><td>Record-based payloads + StreamCodec</td></tr>
+</table>
+</div>
+</section>
+
+<section id="architecture">
+<h2><span class="section-num">2.</span> Arquitectura General</h2>
+<p>El mod se organiza en capas bien definidas con comunicacion unidireccional descendente y eventos ascendentes.</p>
+<div class="state-diagram">+=============================================+
+|              CLIENT LAYER                   |
++=============================================+
+|  Renderers (GeckoLib)  |  Particles (AAA)   |
+|  GUI/HUD/Overlays      |  Sound Manager     |
++=============================================+
+            |                        ^
+            v (render requests)      | (sync payloads S2C)
++=============================================+
+|            NETWORK LAYER                    |
++=============================================+
+|  S2C: Room/Boss/VFX/Trap sync payloads     |
+|  C2S: Interact/Dialogue/Mechanism/Order    |
++=============================================+
+            |                        ^
+            v                        | (events)
++=============================================+
+|             GAME LOGIC LAYER                |
++=============================================+
+|  DungeonManager  | RoomController | Combat  |
+|  TrapFramework   | PuzzleEngine   | Effects |
+|  VanillaInteract | Resonance      | NPCs    |
++=============================================+
+            |                        ^
+            v (read/write)           | (Codec serialize)
++=============================================+
+|           DATA/PERSISTENCE LAYER            |
++=============================================+
+|  AttachmentTypes (Player + Level)          |
+|  JSON Configs (datapacks)                  |
+|  SavedData per dimension                   |
++=============================================+</div>
+<h3>Flujo de una Interaccion Tipica</h3>
+<ol>
+<li>El jugador usa un item vanilla (ej: bone meal) sobre un bloque del mod (ej: oil_surface)</li>
+<li><code>VanillaInteractionHandler</code> intercepta <code>PlayerInteractEvent.RightClickBlock</code></li>
+<li>Busca en <code>InteractionRegistry</code> la combinacion item + target + context</li>
+<li>Ejecuta el efecto (<code>IVanillaInteraction.apply()</code>)</li>
+<li>Dispara <code>VanillaItemUsedInDungeonEvent</code> en el NeoForge Event Bus</li>
+<li>El sistema de VFX escucha el evento y spawna particulas de limpieza</li>
+<li>Se envia <code>VFXSpawnPayload</code> (S2C) a todos los clientes en rango</li>
+<li>El cliente renderiza el efecto AAA Particles</li>
+</ol>
+</section>
+<section id="packages">
+<h2><span class="section-num">3.</span> Estructura de Paquetes</h2>
+<p>Organizacion completa del codigo fuente. Cada paquete tiene una responsabilidad unica.</p>
+<pre>
+<span class="pkg-name">com.colossaldungeons.enhanced</span>            <span class="cmt">// Root - Clase principal @Mod</span>
+<span class="pkg-name">  +-- core</span>                                  <span class="cmt">// Inicializacion, event bus, config</span>
+<span class="pkg-name">  |   +-- registry</span>                          <span class="cmt">// DeferredRegister: bloques, items, entidades, efectos, sonidos, particulas</span>
+<span class="pkg-name">  |   +-- config</span>                            <span class="cmt">// NeoForge ConfigSpec (server, client, common)</span>
+<span class="pkg-name">  |   +-- event</span>                             <span class="cmt">// Event handlers globales (lifecycle, ticks)</span>
+<span class="pkg-name">  +-- dungeon</span>                               <span class="cmt">// Sistema de mazmorras completo</span>
+<span class="pkg-name">  |   +-- room</span>                              <span class="cmt">// Room state machine, bounds, transiciones</span>
+<span class="pkg-name">  |   +-- sector</span>                            <span class="cmt">// Sectores y conexiones entre salas</span>
+<span class="pkg-name">  |   +-- trap</span>                              <span class="cmt">// Framework de trampas (base, activadores, JSON config)</span>
+<span class="pkg-name">  |   +-- puzzle</span>                            <span class="cmt">// Motor de puzles (interfaces, solvers, estados)</span>
+<span class="pkg-name">  |   +-- mechanism</span>                         <span class="cmt">// Mecanismos: hidraulicos, balanzas, resonancia</span>
+<span class="pkg-name">  |   +-- loot</span>                              <span class="cmt">// Loot tables custom, rewards por sala/dungeon</span>
+<span class="pkg-name">  +-- entity</span>                                <span class="cmt">// Todas las entidades del mod (~78 tipos)</span>
+<span class="pkg-name">  |   +-- ai</span>                                <span class="cmt">// AI behaviors, goals, sensors, memory modules</span>
+<span class="pkg-name">  |   +-- boss</span>                              <span class="cmt">// Boss entities, phase logic, cinematics</span>
+<span class="pkg-name">  |   +-- npc</span>                               <span class="cmt">// NPCs del campamento, dialogos, companeros</span>
+<span class="pkg-name">  +-- item</span>                                  <span class="cmt">// Custom items (~85): armas, herramientas, reliquias</span>
+<span class="pkg-name">  |   +-- curio</span>                             <span class="cmt">// Items de Curios API (anillos, amuletos, reliquias)</span>
+<span class="pkg-name">  +-- block</span>                                 <span class="cmt">// Custom blocks y block entities (~55)</span>
+<span class="pkg-name">  |   +-- trap</span>                              <span class="cmt">// Bloques de trampas (lanzallamas, pinchos, etc)</span>
+<span class="pkg-name">  |   +-- mechanism</span>                         <span class="cmt">// Bloques de mecanismos (hidraulicos, braseros)</span>
+<span class="pkg-name">  |   +-- puzzle</span>                            <span class="cmt">// Bloques de puzles (espejos, altares, note blocks)</span>
+<span class="pkg-name">  +-- effect</span>                                <span class="cmt">// MobEffects custom (~18) y status system</span>
+<span class="pkg-name">  +-- network</span>                               <span class="cmt">// Networking payloads (records + StreamCodec)</span>
+<span class="pkg-name">  +-- client</span>                                <span class="cmt">// Solo cliente: rendering, GUI, HUD</span>
+<span class="pkg-name">  |   +-- renderer</span>                          <span class="cmt">// Entity/Block renderers (GeckoLib)</span>
+<span class="pkg-name">  |   +-- particle</span>                          <span class="cmt">// AAA Particles integration</span>
+<span class="pkg-name">  |   +-- gui</span>                               <span class="cmt">// Screens, overlays, bossbar, dialogos</span>
+<span class="pkg-name">  +-- data</span>                                  <span class="cmt">// DataGen: recipes, loot, tags, advancements</span>
+<span class="pkg-name">  |   +-- dungeon</span>                           <span class="cmt">// Dungeon definition loaders y schemas</span>
+<span class="pkg-name">  +-- vanilla</span>                               <span class="cmt">// Sistema de interacciones con items vanilla</span>
+<span class="pkg-name">  +-- api</span>                                   <span class="cmt">// Public API para addons</span>
+</pre>
+<h3>Dependencias entre Paquetes</h3>
+<table>
+<tr><th>Paquete</th><th>Depende de</th><th>Nota</th></tr>
+<tr><td><code>core.registry</code></td><td>Ninguno (solo NeoForge API)</td><td>Primera inicializacion</td></tr>
+<tr><td><code>dungeon</code></td><td><code>core</code>, <code>entity</code>, <code>block</code></td><td>Orquesta gameplay loop</td></tr>
+<tr><td><code>entity.ai</code></td><td><code>entity</code>, SmartBrainLib</td><td>Brain API</td></tr>
+<tr><td><code>vanilla</code></td><td><code>core</code>, <code>dungeon</code>, <code>effect</code></td><td>Intercepta eventos vanilla</td></tr>
+<tr><td><code>client.renderer</code></td><td>GeckoLib, <code>entity</code>, <code>block</code></td><td>Solo dist CLIENTE</td></tr>
+<tr><td><code>client.particle</code></td><td>AAA Particles, <code>network</code></td><td>Solo render</td></tr>
+<tr><td><code>network</code></td><td><code>core</code> (records puros)</td><td>StreamCodec serialization</td></tr>
+<tr><td><code>api</code></td><td>Solo interfaces publicas</td><td>Zero-dependency</td></tr>
+</table>
+</section>
+<section id="registries">
+<h2><span class="section-num">4.</span> Registries (DeferredRegister)</h2>
+<p>Todas las instancias de <code>DeferredRegister</code> del mod. Cada registry se crea con <code>DeferredRegister.create()</code> y se registra al <code>IEventBus</code> en el constructor.</p>
+<table>
+<tr><th>Clase</th><th>Tipo</th><th>Cantidad</th><th>Entradas Clave</th></tr>
+<tr><td><code>CDEBlocks</code></td><td><code>Block</code></td><td>~55</td><td><span class="tag">oil_surface</span><span class="tag">pushable_block</span><span class="tag">hidden_button</span><span class="tag">hydraulic_activator</span><span class="tag">mirror_panel</span><span class="tag">brazier_activable</span><span class="tag">resonance_crystal</span><span class="tag">trap_spike_plate</span><span class="tag">wall_maw_block</span><span class="tag">membrane_block</span><span class="tag">ice_plate</span><span class="tag">golden_mechanism</span><span class="tag">powder_snow_platform</span><span class="tag">nerve_fiber</span></td></tr>
+<tr><td><code>CDEItems</code></td><td><code>Item</code></td><td>~85</td><td><span class="tag tag-gold">counterweight_hammer</span><span class="tag tag-gold">surgeon_blade</span><span class="tag tag-gold">madness_rapier</span><span class="tag tag-gold">cycle_scepter</span><span class="tag tag-gold">noon_lance</span><span class="tag tag-gold">blizzard_bow</span><span class="tag tag-gold">mirror_shard</span><span class="tag tag-gold">escape_crystal</span><span class="tag tag-gold">sanity_candle</span><span class="tag tag-gold">windcutter_cloak</span><span class="tag tag-gold">oracle_relic</span><span class="tag tag-gold">frost_crown</span><span class="tag tag-gold">tempest_crown</span><span class="tag tag-gold">shatter_crown</span></td></tr>
+<tr><td><code>CDEEntities</code></td><td><code>EntityType&lt;?&gt;</code></td><td>~78</td><td><span class="tag tag-green">gelatinous_cube</span><span class="tag tag-green">mimic</span><span class="tag tag-green">neothelid_adult</span><span class="tag tag-green">shattered_sovereign</span><span class="tag tag-green">dying_atlas</span><span class="tag tag-green">sovereign_parasite</span><span class="tag tag-green">crowned_tempest</span><span class="tag tag-green">broken_sanity</span><span class="tag tag-green">primordial_concord</span><span class="tag tag-green">chained_helios</span><span class="tag tag-green">glass_harlequin</span><span class="tag tag-green">valdris</span></td></tr>
+<tr><td><code>CDEEffects</code></td><td><code>MobEffect</code></td><td>~18</td><td><span class="tag">oiled</span><span class="tag">madness</span><span class="tag">resonance_charge</span><span class="tag">hemorrhage</span><span class="tag">elemental_affinity</span><span class="tag">weight_encumbrance</span><span class="tag">solar_burn</span><span class="tag">frost_slow</span><span class="tag">parasitic_poison</span><span class="tag">sanity_drain</span></td></tr>
+<tr><td><code>CDESounds</code></td><td><code>SoundEvent</code></td><td>~120</td><td><span class="tag">trap_activate</span><span class="tag">room_enter</span><span class="tag">boss_phase_change</span><span class="tag">resonance_charge_up</span><span class="tag">oil_ignite</span><span class="tag">bone_meal_cleanse</span><span class="tag">mirror_shatter</span><span class="tag">heartbeat_loop</span><span class="tag">puzzle_complete</span></td></tr>
+<tr><td><code>CDEParticles</code></td><td><code>ParticleType&lt;?&gt;</code></td><td>~35</td><td><span class="tag">oil_drip</span><span class="tag">mercury_splash</span><span class="tag">solar_flare</span><span class="tag">frost_shard</span><span class="tag">bone_meal_cleanse_particle</span><span class="tag">resonance_wave</span><span class="tag">acid_bubble</span><span class="tag">spectral_wisp</span></td></tr>
+<tr><td><code>CDEAttachments</code></td><td><code>AttachmentType&lt;?&gt;</code></td><td>~8</td><td><span class="tag tag-gold">dungeon_progress</span><span class="tag tag-gold">room_state</span><span class="tag tag-gold">player_reputation</span><span class="tag tag-gold">companion_data</span><span class="tag tag-gold">resonance_level</span><span class="tag tag-gold">oil_status</span><span class="tag tag-gold">madness_level</span><span class="tag tag-gold">vanilla_interaction_cooldown</span></td></tr>
+<tr><td><code>CDECreativeTabs</code></td><td><code>CreativeModeTab</code></td><td>3</td><td><span class="tag">cde_blocks_tab</span><span class="tag">cde_items_tab</span><span class="tag">cde_tools_tab</span></td></tr>
+</table>
+</section>
+<section id="systems">
+<h2><span class="section-num">5.</span> Sistemas Core (12 Sistemas)</h2>
+<p>El mod se compone de 12 sistemas interconectados que se comunican via Event Bus de NeoForge.</p>
+
+<div id="systems-dungeon" class="card"><h4>5.1 Dungeon State Machine</h4>
+<p>Gestiona el ciclo de vida completo de cada dungeon: descubrimiento, entrada, activacion de salas, completado y reinicio.</p>
+<h5>Clases: </h5><p><code>DungeonManager</code>, <code>DungeonInstance</code>, <code>DungeonState</code>, <code>DungeonSaveData</code>, <code>DungeonDefinition</code></p>
+<h5>Eventos: </h5><p><span class="tag tag-gold">DungeonEnteredEvent</span><span class="tag tag-gold">RoomActivatedEvent</span><span class="tag tag-gold">DungeonCompletedEvent</span><span class="tag tag-gold">DungeonResetEvent</span><span class="tag tag-gold">SectorTransitionEvent</span></p>
+<p>Persistencia via NeoForge <code>AttachmentTypes</code> en Level (estado de dungeon) y Player (progreso individual). Serializa con <code>Codec</code>.</p></div>
+
+<div id="systems-room" class="card"><h4>5.2 Room Activation System</h4>
+<p>Controla que salas estan activas. Solo 1-3 salas activas simultaneamente para rendimiento.</p>
+<h5>Estados: </h5><p><span class="tag tag-green">UNLOADED</span><span class="tag tag-green">PREPARED</span><span class="tag tag-green">ACTIVE</span><span class="tag tag-green">COMPLETED</span><span class="tag tag-green">DORMANT</span><span class="tag tag-green">SUSPENDED</span></p>
+<h5>Clases: </h5><p><code>RoomController</code>, <code>RoomState</code>, <code>RoomBounds</code>, <code>RoomActivationHandler</code>, <code>RoomTransition</code></p>
+<p><strong>Rendimiento:</strong> Salas UNLOADED/DORMANT deshabilitan AI, BlockEntity tick, VFX y collision avanzada.</p></div>
+
+<div id="systems-trap" class="card"><h4>5.3 Trap Framework</h4>
+<p>Framework completo con Template Method para ciclo de vida, Strategy para activadores y Observer para chain reactions.</p>
+<h5>Clases: </h5><p><code>AbstractTrap</code>, <code>TrapActivator</code>, <code>TrapConfig</code>, <code>TrapRegistry</code>, <code>ITrapBehavior</code>, <code>TrapChainReaction</code>, <code>VanillaTrapInteraction</code></p>
+<ul><li><strong>Template Method:</strong> prepare() &rarr; arm() &rarr; trigger() &rarr; damage() &rarr; reset()</li>
+<li><strong>Strategy:</strong> PressureActivator, ProximityActivator, TimerActivator, ManualActivator</li>
+<li><strong>Observer:</strong> Chain reactions entre trampas conectadas</li></ul></div>
+
+<div id="systems-puzzle" class="card"><h4>5.4 Puzzle Engine</h4>
+<p>Motor de puzles con estados, validacion de solucion y feedback visual/sonoro.</p>
+<h5>Clases: </h5><p><code>PuzzleEngine</code>, <code>IPuzzle</code>, <code>PuzzleState</code>, <code>PuzzleSolver</code>, <code>PuzzleValidator</code>, <code>PuzzleFeedback</code></p>
+<p>Tipos: Secuencia de sonido, Redireccion de luz, Peso/balance, Hidraulico, Patrones, Cooperativo.</p></div>
+
+<div id="systems-mechanism" class="card"><h4>5.5 Mechanism System</h4>
+<p>Mecanismos interactivos como BlockEntity con estado sincronizado.</p>
+<h5>Clases: </h5><p><code>IMechanism</code>, <code>MechanismBlockEntity</code>, <code>HydraulicActivator</code>, <code>BalanceScale</code>, <code>Winch</code>, <code>PushableBlock</code>, <code>BrazierBlock</code>, <code>GoldenMechanism</code></p>
+<p>Command pattern para activaciones. State para niveles de llenado/carga.</p></div>
+
+<div id="systems-vanilla" class="card"><h4>5.6 Vanilla Item Interaction System</h4>
+<p>Sistema central: intercepta uso de items vanilla en contexto de dungeon. Filosofia "vanilla-first".</p>
+<h5>Clases: </h5><p><code>VanillaInteractionHandler</code>, <code>IVanillaInteraction</code>, <code>InteractionRegistry</code>, <code>InteractionContext</code>, <code>InteractionResult</code></p>
+<h5>Ejemplos:</h5>
+<ul><li><strong>Bone Meal + Oil:</strong> Limpia aceite + 30min proteccion</li>
+<li><strong>Honey + Ice:</strong> Elimina deslizamiento</li>
+<li><strong>Fishing Rod + Mirror:</strong> Gira espejos a distancia</li>
+<li><strong>Powder Snow + Abyss:</strong> Plataformas temporales (15-30s)</li>
+<li><strong>Milk + Any Debuff:</strong> Limpia TODOS los debuffs del mod</li>
+<li><strong>TNT + Weak Wall:</strong> Destruye paredes marcadas</li>
+<li><strong>Torch + Invisible:</strong> Revela enemigos invisibles</li></ul>
+<p>Evento: <span class="tag tag-gold">VanillaItemUsedInDungeonEvent</span></p></div>
+
+<div id="systems-resonance" class="card"><h4>5.7 Resonance System</h4>
+<p>Cristales que absorben vibraciones. 4 estados: DORMANT, CHARGING, CHARGED, OVERLOADED.</p>
+<h5>Clases: </h5><p><code>ResonanceCrystal</code>, <code>ResonanceVein</code>, <code>ResonanceState</code>, <code>ResonanceNetwork</code>, <code>ResonanceOverloadEvent</code></p>
+<p>Integra con Sculk Sensors, Note Blocks y Campanas vanilla. TNT causa overload instantaneo.</p></div>
+
+<div id="systems-combat" class="card"><h4>5.8 Combat System</h4>
+<p>Combate con partes rompibles, fases de jefe, ataques telegrafados y dano localizado.</p>
+<h5>Clases: </h5><p><code>CDECombatHandler</code>, <code>BossPhaseManager</code>, <code>AttackPattern</code>, <code>TelegraphedAttack</code>, <code>PartDamageHandler</code>, <code>MultipartEntityBase</code></p></div>
+
+<div id="systems-vfx" class="card"><h4>5.9 VFX System (AAA Particles)</h4>
+<p>Gestiona efectos Effekseer con bone attachment a GeckoLib y pool de reutilizacion.</p>
+<h5>Clases: </h5><p><code>CDEEffectManager</code>, <code>CDEEffectInstance</code>, <code>CDEBoneAttachment</code>, <code>EffectPool</code>, <code>EffectDefinition</code></p>
+<p>Optimizacion: Pool reutilizable, solo sala activa renderiza, LOD por distancia, culling por frustum.</p></div>
+
+<div id="systems-dialogue" class="card"><h4>5.10 Dialogue and NPC System</h4>
+<p>Dialogos data-driven con arboles de decision, condiciones y memoria por jugador.</p>
+<h5>Clases: </h5><p><code>DialogueTree</code>, <code>DialogueNode</code>, <code>DialogueChoice</code>, <code>DialogueCondition</code>, <code>NPCMemory</code>, <code>DialogueRenderer</code></p></div>
+
+<div id="systems-companion" class="card"><h4>5.11 Companion System</h4>
+<p>Companeros con AI, inventario propio y contribucion a puzles cooperativos.</p>
+<h5>Clases: </h5><p><code>CompanionEntity</code>, <code>CompanionAI</code>, <code>CompanionInventory</code>, <code>CompanionOrder</code>, <code>CompanionState</code></p>
+<p>Modos: FOLLOW, WAIT, ATTACK, EXPLORE. Reaccionan a trampas y participan en combate.</p></div>
+
+<div id="systems-addon" class="card"><h4>5.12 Addon API</h4>
+<p>API publica para extensibilidad via otros mods.</p>
+<h5>Clases: </h5><p><code>CDEApi</code>, <code>IAddonProvider</code>, <code>AddonRegistry</code>, <code>AddonDungeonDefinition</code>, <code>AddonContentPack</code></p>
+<p>Service Locator + Registry pattern + Event-driven integration.</p></div>
+</section>
+<section id="apis">
+<h2><span class="section-num">6.</span> Integracion de APIs Externas</h2>
+
+<div id="api-geckolib" class="card"><h4>6.1 GeckoLib 4.x (Animaciones)</h4>
+<p><strong>Version:</strong> GeckoLib 4.x para NeoForge 1.21.1</p>
+<ul><li>Entidades animadas extienden <code>GeoEntity</code>, implementan <code>getAnimatableInstanceCache()</code> y <code>registerControllers()</code></li>
+<li>Modelos <code>.geo.json</code> en <code>assets/cde/geo/</code></li>
+<li>Animaciones <code>.animation.json</code> con KeyframeEvents para sincronizar sonido/particulas</li>
+<li>Renderers extienden <code>GeoEntityRenderer</code> con layers custom</li></ul>
+<p>Clases wrapper: <code>CDEGeoEntity</code>, <code>CDEGeoModel</code>, <code>CDEAnimationController</code>, <code>CDEGeoBlockEntity</code></p></div>
+
+<div id="api-aaa" class="card"><h4>6.2 AAA Particles (Effekseer)</h4>
+<p>Efectos .efkefc cargados como recursos, spawneados via <code>EffekseerEffect.create(level, pos, rotation, scale)</code>. Bone attachment para sync con GeckoLib. Lifecycle con callbacks onComplete.</p>
+<p>Clases: <code>CDEEffectManager</code>, <code>CDEEffectInstance</code>, <code>CDEBoneAttachment</code></p></div>
+
+<div id="api-smartbrain" class="card"><h4>6.3 SmartBrainLib (AI Avanzada)</h4>
+<p>Wrapper sobre Brain API. Sensors + MemoryModules + Behaviors componen arboles de AI sin boilerplate.</p>
+<p>Clases: <code>CDEBrainProvider</code>, <code>CDESensor</code>, <code>CDEBehavior</code>, <code>CDEBossAI</code></p>
+<p>Custom sensors: VibracionSensor, LightLevelSensor, PlayerProximitySensor.</p></div>
+
+<div id="api-curios" class="card"><h4>6.4 Curios API (Equipamiento Extra)</h4>
+<table><tr><th>Slot</th><th>Items</th><th>Efecto</th></tr>
+<tr><td>amulet</td><td>Oracle Relic, Solar Fragment</td><td>Efectos pasivos permanentes</td></tr>
+<tr><td>ring</td><td>Frost Crown, Tempest Crown</td><td>Bonus elementales</td></tr>
+<tr><td>belt</td><td>Windcutter Cloak</td><td>Mobilidad y defensa</td></tr>
+<tr><td>relic</td><td>Titan Heart, Elemental Essence</td><td>Habilidades activas</td></tr></table>
+<p>Items implementan <code>ICurioItem</code>: onEquip(), curioTick(), onUnequip(). Renderer via createRenderer().</p></div>
+
+<div id="api-neoforge" class="card"><h4>6.5 NeoForge Systems</h4>
+<h5>AttachmentTypes</h5><p>Reemplaza Capabilities. Progreso, estado de sala, datos de companero. Serializa con Codec.</p>
+<h5>Event Bus</h5><p><code>IEventBus</code> (mod) para lifecycle. <code>NeoForge.EVENT_BUS</code> (game) para gameplay: LivingHurtEvent, PlayerInteractEvent, BlockEvent, ServerTickEvent.</p>
+<h5>Networking</h5><p>Records + CustomPacketPayload + StreamCodec. Registrados en RegisterPayloadHandlersEvent.</p>
+<h5>DataGen</h5><p>Extends DataProvider para JSON schemas custom. Genera recipes, loot, tags, advancements y configs.</p></div>
+</section>
+<section id="code-examples">
+<h2><span class="section-num">7.</span> Ejemplos de Codigo Java</h2>
+<p>Todos usan Java 21, NeoForge 1.21.1, Mojang Official Mappings. <code>DeferredRegister.create()</code> en lugar de ForgeRegistries. <code>AttachmentTypes</code> en lugar de Capabilities.</p>
+
+<div id="code-mod-class">
+<h3>7.1 Clase Principal del Mod (@Mod)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.core.registry.*;
+<span class="kw">import</span> com.colossaldungeons.enhanced.network.CDENetworking;
+<span class="kw">import</span> net.neoforged.bus.api.IEventBus;
+<span class="kw">import</span> net.neoforged.fml.common.Mod;
+<span class="kw">import</span> net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+<span class="kw">import</span> net.neoforged.neoforge.common.NeoForge;
+<span class="kw">import</span> org.slf4j.Logger;
+<span class="kw">import</span> org.slf4j.LoggerFactory;
+
+<span class="ann">@Mod</span>(<span class="type">ColossalDungeons</span>.MOD_ID)
+<span class="kw">public class</span> <span class="type">ColossalDungeons</span> {
+
+    <span class="kw">public static final</span> <span class="type">String</span> MOD_ID = <span class="str">"colossal_dungeons_enhanced"</span>;
+    <span class="kw">private static final</span> <span class="type">Logger</span> LOGGER = <span class="type">LoggerFactory</span>.getLogger(<span class="type">ColossalDungeons</span>.<span class="kw">class</span>);
+
+    <span class="kw">public</span> <span class="type">ColossalDungeons</span>(<span class="type">IEventBus</span> modBus) {
+        LOGGER.info(<span class="str">"Initializing Colossal Dungeons Enhanced..."</span>);
+
+        <span class="cmt">// Registrar todos los DeferredRegisters al mod event bus</span>
+        <span class="type">CDEBlocks</span>.register(modBus);
+        <span class="type">CDEItems</span>.register(modBus);
+        <span class="type">CDEEntities</span>.register(modBus);
+        <span class="type">CDEEffects</span>.register(modBus);
+        <span class="type">CDESounds</span>.register(modBus);
+        <span class="type">CDEParticles</span>.register(modBus);
+        <span class="type">CDEAttachments</span>.register(modBus);
+        <span class="type">CDECreativeTabs</span>.register(modBus);
+
+        <span class="cmt">// Mod bus listeners (lifecycle)</span>
+        modBus.addListener(<span class="kw">this</span>::onCommonSetup);
+        modBus.addListener(<span class="type">CDENetworking</span>::registerPayloads);
+
+        <span class="cmt">// Game bus listeners (gameplay events)</span>
+        <span class="type">NeoForge</span>.EVENT_BUS.register(<span class="kw">new</span> <span class="type">VanillaInteractionHandler</span>());
+        <span class="type">NeoForge</span>.EVENT_BUS.register(<span class="kw">new</span> <span class="type">DungeonEventHandler</span>());
+        <span class="type">NeoForge</span>.EVENT_BUS.register(<span class="kw">new</span> <span class="type">CombatEventHandler</span>());
+    }
+
+    <span class="kw">private void</span> onCommonSetup(<span class="type">FMLCommonSetupEvent</span> event) {
+        event.enqueueWork(() -&gt; {
+            <span class="type">InteractionRegistry</span>.initialize();
+            <span class="type">TrapRegistry</span>.initialize();
+            LOGGER.info(<span class="str">"CDE common setup complete"</span>);
+        });
+    }
+}
+</pre></div>
+
+<div id="code-registries">
+<h3>7.2 DeferredRegister (Bloques, Items, Entidades)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.core.registry;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.ColossalDungeons;
+<span class="kw">import</span> com.colossaldungeons.enhanced.block.*;
+<span class="kw">import</span> com.colossaldungeons.enhanced.block.trap.*;
+<span class="kw">import</span> com.colossaldungeons.enhanced.block.mechanism.*;
+<span class="kw">import</span> net.minecraft.core.registries.BuiltInRegistries;
+<span class="kw">import</span> net.minecraft.world.level.block.Block;
+<span class="kw">import</span> net.minecraft.world.level.block.SoundType;
+<span class="kw">import</span> net.minecraft.world.level.block.state.BlockBehaviour;
+<span class="kw">import</span> net.minecraft.world.level.material.MapColor;
+<span class="kw">import</span> net.neoforged.bus.api.IEventBus;
+<span class="kw">import</span> net.neoforged.neoforge.registries.DeferredHolder;
+<span class="kw">import</span> net.neoforged.neoforge.registries.DeferredRegister;
+
+<span class="kw">public class</span> <span class="type">CDEBlocks</span> {
+
+    <span class="kw">public static final</span> <span class="type">DeferredRegister</span>&lt;<span class="type">Block</span>&gt; BLOCKS =
+        <span class="type">DeferredRegister</span>.create(<span class="type">BuiltInRegistries</span>.BLOCK, <span class="type">ColossalDungeons</span>.MOD_ID);
+
+    <span class="kw">public static final</span> <span class="type">DeferredHolder</span>&lt;<span class="type">Block</span>, <span class="type">OilSurfaceBlock</span>&gt; OIL_SURFACE =
+        BLOCKS.register(<span class="str">"oil_surface"</span>, () -&gt; <span class="kw">new</span> <span class="type">OilSurfaceBlock</span>(
+            <span class="type">BlockBehaviour.Properties</span>.of()
+                .mapColor(<span class="type">MapColor</span>.COLOR_BLACK)
+                .noCollission().replaceable()
+                .sound(<span class="type">SoundType</span>.SLIME_BLOCK)
+                .ignitedByLava()
+        ));
+
+    <span class="kw">public static final</span> <span class="type">DeferredHolder</span>&lt;<span class="type">Block</span>, <span class="type">SpikePlateBlock</span>&gt; TRAP_SPIKE_PLATE =
+        BLOCKS.register(<span class="str">"trap_spike_plate"</span>, () -&gt; <span class="kw">new</span> <span class="type">SpikePlateBlock</span>(
+            <span class="type">BlockBehaviour.Properties</span>.of()
+                .mapColor(<span class="type">MapColor</span>.STONE)
+                .strength(<span class="num">50.0f</span>, <span class="num">1200.0f</span>)
+                .requiresCorrectToolForDrops().noOcclusion()
+        ));
+
+    <span class="kw">public static final</span> <span class="type">DeferredHolder</span>&lt;<span class="type">Block</span>, <span class="type">ResonanceCrystalBlock</span>&gt; RESONANCE_CRYSTAL =
+        BLOCKS.register(<span class="str">"resonance_crystal"</span>, () -&gt; <span class="kw">new</span> <span class="type">ResonanceCrystalBlock</span>(
+            <span class="type">BlockBehaviour.Properties</span>.of()
+                .mapColor(<span class="type">MapColor</span>.COLOR_PURPLE)
+                .strength(<span class="num">20.0f</span>, <span class="num">300.0f</span>)
+                .lightLevel(state -&gt; state.getValue(<span class="type">ResonanceCrystalBlock</span>.CHARGE_LEVEL) * <span class="num">3</span>)
+                .sound(<span class="type">SoundType</span>.AMETHYST).noOcclusion()
+        ));
+
+    <span class="kw">public static void</span> register(<span class="type">IEventBus</span> bus) { BLOCKS.register(bus); }
+}
+</pre></div>
+
+<div id="code-attachments">
+<h3>7.3 AttachmentTypes (Reemplaza Capabilities)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.core.registry;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.ColossalDungeons;
+<span class="kw">import</span> com.colossaldungeons.enhanced.dungeon.DungeonProgress;
+<span class="kw">import</span> com.colossaldungeons.enhanced.dungeon.room.RoomStateData;
+<span class="kw">import</span> com.mojang.serialization.Codec;
+<span class="kw">import</span> net.neoforged.bus.api.IEventBus;
+<span class="kw">import</span> net.neoforged.neoforge.attachment.AttachmentType;
+<span class="kw">import</span> net.neoforged.neoforge.registries.DeferredRegister;
+<span class="kw">import</span> net.neoforged.neoforge.registries.NeoForgeRegistries;
+
+<span class="kw">public class</span> <span class="type">CDEAttachments</span> {
+
+    <span class="kw">public static final</span> <span class="type">DeferredRegister</span>&lt;<span class="type">AttachmentType</span>&lt;?&gt;&gt; ATTACHMENTS =
+        <span class="type">DeferredRegister</span>.create(<span class="type">NeoForgeRegistries</span>.ATTACHMENT_TYPES, <span class="type">ColossalDungeons</span>.MOD_ID);
+
+    <span class="cmt">// Progreso del jugador - persiste al morir</span>
+    <span class="kw">public static final</span> <span class="kw">var</span> DUNGEON_PROGRESS = ATTACHMENTS.register(
+        <span class="str">"dungeon_progress"</span>,
+        () -&gt; <span class="type">AttachmentType</span>.builder(() -&gt; <span class="kw">new</span> <span class="type">DungeonProgress</span>())
+            .serialize(<span class="type">DungeonProgress</span>.CODEC).copyOnDeath().build()
+    );
+
+    <span class="cmt">// Estado de salas (vinculado al Level)</span>
+    <span class="kw">public static final</span> <span class="kw">var</span> ROOM_STATE = ATTACHMENTS.register(
+        <span class="str">"room_state"</span>,
+        () -&gt; <span class="type">AttachmentType</span>.builder(() -&gt; <span class="kw">new</span> <span class="type">RoomStateData</span>())
+            .serialize(<span class="type">RoomStateData</span>.CODEC).build()
+    );
+
+    <span class="cmt">// Nivel de aceite (0=limpio, 1-3=aceite)</span>
+    <span class="kw">public static final</span> <span class="kw">var</span> OIL_STATUS = ATTACHMENTS.register(
+        <span class="str">"oil_status"</span>,
+        () -&gt; <span class="type">AttachmentType</span>.builder(() -&gt; <span class="num">0</span>).serialize(<span class="type">Codec</span>.INT).build()
+    );
+
+    <span class="cmt">// Nivel de locura (0-100)</span>
+    <span class="kw">public static final</span> <span class="kw">var</span> MADNESS_LEVEL = ATTACHMENTS.register(
+        <span class="str">"madness_level"</span>,
+        () -&gt; <span class="type">AttachmentType</span>.builder(() -&gt; <span class="num">0</span>).serialize(<span class="type">Codec</span>.INT).build()
+    );
+
+    <span class="cmt">// Cooldowns de interacciones vanilla</span>
+    <span class="kw">public static final</span> <span class="kw">var</span> VANILLA_INTERACTION_COOLDOWN = ATTACHMENTS.register(
+        <span class="str">"vanilla_interaction_cooldown"</span>,
+        () -&gt; <span class="type">AttachmentType</span>.builder(() -&gt; <span class="kw">new</span> <span class="type">InteractionCooldowns</span>())
+            .serialize(<span class="type">InteractionCooldowns</span>.CODEC).build()
+    );
+
+    <span class="kw">public static void</span> register(<span class="type">IEventBus</span> bus) { ATTACHMENTS.register(bus); }
+}
+
+<span class="cmt">// Uso:</span>
+<span class="cmt">// DungeonProgress progress = player.getData(CDEAttachments.DUNGEON_PROGRESS);</span>
+<span class="cmt">// player.setData(CDEAttachments.OIL_STATUS, oilLevel + 1);</span>
+<span class="cmt">// RoomStateData roomData = level.getData(CDEAttachments.ROOM_STATE);</span>
+</pre></div>
+<div id="code-entity">
+<h3>7.4 Entidad con GeckoLib (GeoEntity)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.entity;
+
+<span class="kw">import</span> net.minecraft.world.entity.EntityType;
+<span class="kw">import</span> net.minecraft.world.entity.PathfinderMob;
+<span class="kw">import</span> net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+<span class="kw">import</span> net.minecraft.world.entity.ai.attributes.Attributes;
+<span class="kw">import</span> net.minecraft.world.level.Level;
+<span class="kw">import</span> software.bernie.geckolib.animatable.GeoEntity;
+<span class="kw">import</span> software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+<span class="kw">import</span> software.bernie.geckolib.animation.*;
+<span class="kw">import</span> software.bernie.geckolib.util.GeckoLibUtil;
+
+<span class="kw">public class</span> <span class="type">GelatinousCubeEntity</span> <span class="kw">extends</span> <span class="type">PathfinderMob</span> <span class="kw">implements</span> <span class="type">GeoEntity</span> {
+
+    <span class="kw">private final</span> <span class="type">AnimatableInstanceCache</span> cache = <span class="type">GeckoLibUtil</span>.createInstanceCache(<span class="kw">this</span>);
+
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> IDLE = <span class="type">RawAnimation</span>.begin().thenLoop(<span class="str">"animation.gelatinous_cube.idle"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> MOVE = <span class="type">RawAnimation</span>.begin().thenLoop(<span class="str">"animation.gelatinous_cube.move"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> ATTACK = <span class="type">RawAnimation</span>.begin().thenPlay(<span class="str">"animation.gelatinous_cube.attack"</span>);
+
+    <span class="kw">public</span> <span class="type">GelatinousCubeEntity</span>(<span class="type">EntityType</span>&lt;? <span class="kw">extends</span> <span class="type">PathfinderMob</span>&gt; type, <span class="type">Level</span> level) {
+        <span class="kw">super</span>(type, level);
+    }
+
+    <span class="kw">public static</span> <span class="type">AttributeSupplier.Builder</span> createAttributes() {
+        <span class="kw">return</span> <span class="type">PathfinderMob</span>.createMobAttributes()
+            .add(<span class="type">Attributes</span>.MAX_HEALTH, <span class="num">80.0</span>)
+            .add(<span class="type">Attributes</span>.MOVEMENT_SPEED, <span class="num">0.18</span>)
+            .add(<span class="type">Attributes</span>.ATTACK_DAMAGE, <span class="num">8.0</span>)
+            .add(<span class="type">Attributes</span>.KNOCKBACK_RESISTANCE, <span class="num">0.8</span>);
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> registerControllers(<span class="type">AnimatableManager.ControllerRegistrar</span> controllers) {
+        controllers.add(<span class="kw">new</span> <span class="type">AnimationController</span>&lt;&gt;(<span class="kw">this</span>, <span class="str">"main"</span>, <span class="num">5</span>, state -&gt; {
+            <span class="kw">if</span> (state.isMoving()) <span class="kw">return</span> state.setAndContinue(MOVE);
+            <span class="kw">return</span> state.setAndContinue(IDLE);
+        }));
+        controllers.add(<span class="kw">new</span> <span class="type">AnimationController</span>&lt;&gt;(<span class="kw">this</span>, <span class="str">"attack"</span>, <span class="num">0</span>, state -&gt; {
+            <span class="kw">if</span> (<span class="kw">this</span>.swinging) <span class="kw">return</span> state.setAndContinue(ATTACK);
+            <span class="kw">return</span> <span class="type">PlayState</span>.STOP;
+        }));
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">AnimatableInstanceCache</span> getAnimatableInstanceCache() { <span class="kw">return this</span>.cache; }
+}
+</pre></div>
+
+<div id="code-animation">
+<h3>7.5 AnimationController con Transiciones de Fase (Boss)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.entity.boss;
+
+<span class="kw">import</span> software.bernie.geckolib.animation.*;
+<span class="kw">import</span> software.bernie.geckolib.animatable.GeoEntity;
+<span class="kw">import</span> software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+<span class="kw">import</span> software.bernie.geckolib.util.GeckoLibUtil;
+<span class="kw">import</span> net.minecraft.world.entity.monster.Monster;
+<span class="kw">import</span> net.minecraft.world.entity.EntityType;
+<span class="kw">import</span> net.minecraft.world.level.Level;
+
+<span class="kw">public class</span> <span class="type">DyingAtlasEntity</span> <span class="kw">extends</span> <span class="type">Monster</span> <span class="kw">implements</span> <span class="type">GeoEntity</span> {
+
+    <span class="kw">private final</span> <span class="type">AnimatableInstanceCache</span> cache = <span class="type">GeckoLibUtil</span>.createInstanceCache(<span class="kw">this</span>);
+    <span class="kw">public enum</span> <span class="type">BossPhase</span> { DORMANT, AWAKENING, PHASE_1, TRANSITION_1_2, PHASE_2, TRANSITION_2_3, PHASE_3, DEATH }
+    <span class="kw">private</span> <span class="type">BossPhase</span> currentPhase = <span class="type">BossPhase</span>.DORMANT;
+
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> DORMANT_IDLE = <span class="type">RawAnimation</span>.begin().thenLoop(<span class="str">"animation.dying_atlas.dormant"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> PHASE1_IDLE = <span class="type">RawAnimation</span>.begin().thenLoop(<span class="str">"animation.dying_atlas.phase1_idle"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> PHASE1_SLAM = <span class="type">RawAnimation</span>.begin().thenPlay(<span class="str">"animation.dying_atlas.slam"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> PHASE_TRANSITION = <span class="type">RawAnimation</span>.begin().thenPlay(<span class="str">"animation.dying_atlas.transition"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> PHASE3_RAGE = <span class="type">RawAnimation</span>.begin().thenLoop(<span class="str">"animation.dying_atlas.phase3_rage"</span>);
+    <span class="kw">private static final</span> <span class="type">RawAnimation</span> DEATH_ANIM = <span class="type">RawAnimation</span>.begin().thenPlayAndHold(<span class="str">"animation.dying_atlas.death"</span>);
+
+    <span class="kw">public</span> <span class="type">DyingAtlasEntity</span>(<span class="type">EntityType</span>&lt;? <span class="kw">extends</span> <span class="type">Monster</span>&gt; type, <span class="type">Level</span> level) { <span class="kw">super</span>(type, level); }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> registerControllers(<span class="type">AnimatableManager.ControllerRegistrar</span> controllers) {
+        controllers.add(<span class="kw">new</span> <span class="type">AnimationController</span>&lt;&gt;(<span class="kw">this</span>, <span class="str">"phase_controller"</span>, <span class="num">10</span>, state -&gt; {
+            <span class="kw">return switch</span> (currentPhase) {
+                <span class="kw">case</span> DORMANT -&gt; state.setAndContinue(DORMANT_IDLE);
+                <span class="kw">case</span> PHASE_1 -&gt; state.setAndContinue(PHASE1_IDLE);
+                <span class="kw">case</span> TRANSITION_1_2, TRANSITION_2_3 -&gt; state.setAndContinue(PHASE_TRANSITION);
+                <span class="kw">case</span> PHASE_3 -&gt; state.setAndContinue(PHASE3_RAGE);
+                <span class="kw">case</span> DEATH -&gt; state.setAndContinue(DEATH_ANIM);
+                <span class="kw">default</span> -&gt; state.setAndContinue(PHASE1_IDLE);
+            };
+        }).<span class="fn">setSoundKeyframeHandler</span>(event -&gt; {
+            <span class="kw">if</span> (event.getKeyframeData().getSound().equals(<span class="str">"slam_impact"</span>)) {
+                <span class="kw">this</span>.level().playSound(<span class="kw">null</span>, <span class="kw">this</span>.blockPosition(),
+                    <span class="type">CDESounds</span>.BOSS_SLAM.get(), <span class="kw">this</span>.getSoundSource(), <span class="num">2.0f</span>, <span class="num">0.8f</span>);
+            }
+        }));
+    }
+
+    <span class="kw">public void</span> transitionToPhase(<span class="type">BossPhase</span> newPhase) {
+        <span class="kw">this</span>.currentPhase = newPhase;
+        <span class="kw">if</span> (!<span class="kw">this</span>.level().isClientSide()) {
+            <span class="type">CDENetworking</span>.sendToTracking(<span class="kw">this</span>, <span class="kw">new</span> <span class="type">BossPhasePayload</span>(<span class="kw">this</span>.getId(), newPhase.ordinal()));
+        }
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">AnimatableInstanceCache</span> getAnimatableInstanceCache() { <span class="kw">return this</span>.cache; }
+}
+</pre></div>
+<div id="code-trap">
+<h3>7.6 AbstractTrap (Template Method Pattern)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.dungeon.trap;
+
+<span class="kw">import</span> net.minecraft.core.BlockPos;
+<span class="kw">import</span> net.minecraft.server.level.ServerLevel;
+<span class="kw">import</span> net.minecraft.world.entity.player.Player;
+<span class="kw">import</span> net.minecraft.world.phys.AABB;
+<span class="kw">import</span> java.util.List;
+
+<span class="kw">public abstract class</span> <span class="type">AbstractTrap</span> {
+
+    <span class="kw">public enum</span> <span class="type">TrapState</span> { INACTIVE, PREPARED, ARMED, TRIGGERED, COOLDOWN }
+
+    <span class="kw">protected</span> <span class="type">TrapState</span> state = <span class="type">TrapState</span>.INACTIVE;
+    <span class="kw">protected final</span> <span class="type">TrapConfig</span> config;
+    <span class="kw">protected final</span> <span class="type">BlockPos</span> origin;
+    <span class="kw">protected</span> <span class="type">TrapActivator</span> activator;
+    <span class="kw">protected int</span> cooldownTicks = <span class="num">0</span>;
+
+    <span class="kw">protected</span> <span class="type">AbstractTrap</span>(<span class="type">TrapConfig</span> config, <span class="type">BlockPos</span> origin) {
+        <span class="kw">this</span>.config = config;
+        <span class="kw">this</span>.origin = origin;
+        <span class="kw">this</span>.activator = <span class="type">TrapActivator</span>.fromConfig(config.activator());
+    }
+
+    <span class="cmt">/** Template Method - ciclo completo. NO override. */</span>
+    <span class="kw">public final void</span> tick(<span class="type">ServerLevel</span> level) {
+        <span class="kw">switch</span> (state) {
+            <span class="kw">case</span> INACTIVE -&gt; { <span class="kw">if</span> (shouldPrepare(level)) { prepare(level); state = <span class="type">TrapState</span>.PREPARED; } }
+            <span class="kw">case</span> PREPARED -&gt; { <span class="kw">if</span> (shouldArm(level)) { arm(level); state = <span class="type">TrapState</span>.ARMED; } }
+            <span class="kw">case</span> ARMED -&gt; { <span class="kw">if</span> (activator.shouldTrigger(level, origin)) { trigger(level); state = <span class="type">TrapState</span>.TRIGGERED; } }
+            <span class="kw">case</span> TRIGGERED -&gt; {
+                <span class="type">List</span>&lt;<span class="type">Player</span>&gt; targets = getTargetsInRange(level);
+                <span class="kw">if</span> (!targets.isEmpty()) damage(level, targets);
+                cooldownTicks = config.cooldownTicks();
+                state = <span class="type">TrapState</span>.COOLDOWN;
+            }
+            <span class="kw">case</span> COOLDOWN -&gt; { <span class="kw">if</span> (--cooldownTicks &lt;= <span class="num">0</span>) { reset(level); state = <span class="type">TrapState</span>.INACTIVE; } }
+        }
+    }
+
+    <span class="cmt">// Abstract extension points</span>
+    <span class="kw">protected abstract boolean</span> shouldPrepare(<span class="type">ServerLevel</span> level);
+    <span class="kw">protected abstract boolean</span> shouldArm(<span class="type">ServerLevel</span> level);
+    <span class="kw">protected abstract void</span> prepare(<span class="type">ServerLevel</span> level);
+    <span class="kw">protected abstract void</span> arm(<span class="type">ServerLevel</span> level);
+    <span class="kw">protected abstract void</span> trigger(<span class="type">ServerLevel</span> level);
+    <span class="kw">protected abstract void</span> damage(<span class="type">ServerLevel</span> level, <span class="type">List</span>&lt;<span class="type">Player</span>&gt; targets);
+    <span class="kw">protected abstract void</span> reset(<span class="type">ServerLevel</span> level);
+
+    <span class="kw">protected</span> <span class="type">List</span>&lt;<span class="type">Player</span>&gt; getTargetsInRange(<span class="type">ServerLevel</span> level) {
+        <span class="type">AABB</span> hitbox = config.hitbox().move(origin);
+        <span class="kw">return</span> level.getEntitiesOfClass(<span class="type">Player</span>.<span class="kw">class</span>, hitbox,
+            p -&gt; !p.isCreative() && !p.isSpectator());
+    }
+}
+</pre></div>
+
+<div id="code-vanilla">
+<h3>7.7 VanillaInteractionHandler (PlayerInteractEvent)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.vanilla;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.core.registry.CDEAttachments;
+<span class="kw">import</span> com.colossaldungeons.enhanced.dungeon.DungeonManager;
+<span class="kw">import</span> net.minecraft.core.BlockPos;
+<span class="kw">import</span> net.minecraft.server.level.ServerLevel;
+<span class="kw">import</span> net.minecraft.server.level.ServerPlayer;
+<span class="kw">import</span> net.minecraft.world.item.ItemStack;
+<span class="kw">import</span> net.minecraft.world.level.block.state.BlockState;
+<span class="kw">import</span> net.neoforged.bus.api.SubscribeEvent;
+<span class="kw">import</span> net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+<span class="kw">import</span> net.neoforged.neoforge.common.NeoForge;
+
+<span class="kw">public class</span> <span class="type">VanillaInteractionHandler</span> {
+
+    <span class="ann">@SubscribeEvent</span>
+    <span class="kw">public void</span> onRightClickBlock(<span class="type">PlayerInteractEvent.RightClickBlock</span> event) {
+        <span class="kw">if</span> (event.getLevel().isClientSide()) <span class="kw">return</span>;
+
+        <span class="type">ServerPlayer</span> player = (<span class="type">ServerPlayer</span>) event.getEntity();
+        <span class="type">ServerLevel</span> level = (<span class="type">ServerLevel</span>) event.getLevel();
+        <span class="type">BlockPos</span> pos = event.getPos();
+        <span class="type">ItemStack</span> stack = event.getItemStack();
+        <span class="type">BlockState</span> blockState = level.getBlockState(pos);
+
+        <span class="cmt">// Solo procesar en dungeon activa</span>
+        <span class="kw">if</span> (!<span class="type">DungeonManager</span>.get(level).isPlayerInDungeon(player)) <span class="kw">return</span>;
+
+        <span class="cmt">// Verificar cooldown</span>
+        <span class="type">InteractionCooldowns</span> cd = player.getData(<span class="type">CDEAttachments</span>.VANILLA_INTERACTION_COOLDOWN);
+        <span class="kw">if</span> (cd.isOnCooldown(stack.getItem())) <span class="kw">return</span>;
+
+        <span class="type">InteractionContext</span> ctx = <span class="kw">new</span> <span class="type">InteractionContext</span>(player, level, pos, blockState, stack,
+            <span class="type">DungeonManager</span>.get(level).getCurrentRoom(player));
+
+        <span class="type">InteractionRegistry</span>.findInteraction(ctx).ifPresent(interaction -&gt; {
+            <span class="kw">if</span> (interaction.canApply(ctx)) {
+                <span class="type">InteractionResult</span> result = interaction.apply(ctx);
+                <span class="kw">if</span> (result == <span class="type">InteractionResult</span>.SUCCESS) {
+                    <span class="kw">if</span> (interaction.consumesItem()) stack.shrink(<span class="num">1</span>);
+                    cd.setCooldown(stack.getItem(), interaction.getCooldown());
+                    player.setData(<span class="type">CDEAttachments</span>.VANILLA_INTERACTION_COOLDOWN, cd);
+                    <span class="type">NeoForge</span>.EVENT_BUS.post(<span class="kw">new</span> <span class="type">VanillaItemUsedInDungeonEvent</span>(player, stack.getItem(), pos, result));
+                    event.setCanceled(<span class="kw">true</span>);
+                }
+            }
+        });
+    }
+}
+</pre></div>
+
+<div id="code-network">
+<h3>7.8 Custom Networking Payload (StreamCodec)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.network;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.ColossalDungeons;
+<span class="kw">import</span> net.minecraft.core.BlockPos;
+<span class="kw">import</span> net.minecraft.network.FriendlyByteBuf;
+<span class="kw">import</span> net.minecraft.network.codec.ByteBufCodecs;
+<span class="kw">import</span> net.minecraft.network.codec.StreamCodec;
+<span class="kw">import</span> net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+<span class="kw">import</span> net.minecraft.resources.ResourceLocation;
+
+<span class="kw">public record</span> <span class="type">TrapActivatePayload</span>(
+    <span class="type">BlockPos</span> trapPos, <span class="type">String</span> trapType, <span class="kw">int</span> intensity, <span class="kw">float</span> damageRadius
+) <span class="kw">implements</span> <span class="type">CustomPacketPayload</span> {
+
+    <span class="kw">public static final</span> <span class="type">CustomPacketPayload.Type</span>&lt;<span class="type">TrapActivatePayload</span>&gt; TYPE =
+        <span class="kw">new</span> <span class="type">CustomPacketPayload.Type</span>&lt;&gt;(
+            <span class="type">ResourceLocation</span>.fromNamespaceAndPath(<span class="type">ColossalDungeons</span>.MOD_ID, <span class="str">"trap_activate"</span>));
+
+    <span class="kw">public static final</span> <span class="type">StreamCodec</span>&lt;<span class="type">FriendlyByteBuf</span>, <span class="type">TrapActivatePayload</span>&gt; STREAM_CODEC =
+        <span class="type">StreamCodec</span>.composite(
+            <span class="type">BlockPos</span>.STREAM_CODEC, <span class="type">TrapActivatePayload</span>::trapPos,
+            <span class="type">ByteBufCodecs</span>.STRING_UTF8, <span class="type">TrapActivatePayload</span>::trapType,
+            <span class="type">ByteBufCodecs</span>.VAR_INT, <span class="type">TrapActivatePayload</span>::intensity,
+            <span class="type">ByteBufCodecs</span>.FLOAT, <span class="type">TrapActivatePayload</span>::damageRadius,
+            <span class="type">TrapActivatePayload</span>::<span class="kw">new</span>);
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">CustomPacketPayload.Type</span>&lt;<span class="type">TrapActivatePayload</span>&gt; type() { <span class="kw">return</span> TYPE; }
+}
+
+<span class="cmt">// Registro en CDENetworking:</span>
+<span class="kw">public static void</span> registerPayloads(<span class="type">RegisterPayloadHandlersEvent</span> event) {
+    <span class="type">PayloadRegistrar</span> reg = event.registrar(<span class="str">"1.0.0"</span>);
+    reg.playToClient(<span class="type">TrapActivatePayload</span>.TYPE, <span class="type">TrapActivatePayload</span>.STREAM_CODEC, CDENetworking::handleTrapClient);
+    reg.playToClient(<span class="type">RoomSyncPayload</span>.TYPE, <span class="type">RoomSyncPayload</span>.STREAM_CODEC, CDENetworking::handleRoomClient);
+    reg.playToClient(<span class="type">BossPhasePayload</span>.TYPE, <span class="type">BossPhasePayload</span>.STREAM_CODEC, CDENetworking::handleBossClient);
+    reg.playToClient(<span class="type">VFXSpawnPayload</span>.TYPE, <span class="type">VFXSpawnPayload</span>.STREAM_CODEC, CDENetworking::handleVFXClient);
+    reg.playToServer(<span class="type">MechanismActivatePayload</span>.TYPE, <span class="type">MechanismActivatePayload</span>.STREAM_CODEC, CDENetworking::handleMechServer);
+    reg.playToServer(<span class="type">DialogueChoicePayload</span>.TYPE, <span class="type">DialogueChoicePayload</span>.STREAM_CODEC, CDENetworking::handleDialogueServer);
+    reg.playToServer(<span class="type">CompanionOrderPayload</span>.TYPE, <span class="type">CompanionOrderPayload</span>.STREAM_CODEC, CDENetworking::handleOrderServer);
+}
+</pre></div>
+<div id="code-dungeon">
+<h3>7.9 DungeonManager (Room State Machine)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.dungeon;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.dungeon.room.*;
+<span class="kw">import</span> com.colossaldungeons.enhanced.network.*;
+<span class="kw">import</span> net.minecraft.resources.ResourceLocation;
+<span class="kw">import</span> net.minecraft.server.level.ServerLevel;
+<span class="kw">import</span> net.minecraft.server.level.ServerPlayer;
+<span class="kw">import</span> net.neoforged.bus.api.SubscribeEvent;
+<span class="kw">import</span> net.neoforged.neoforge.event.tick.ServerTickEvent;
+<span class="kw">import</span> java.util.*;
+
+<span class="kw">public class</span> <span class="type">DungeonManager</span> {
+
+    <span class="kw">private static final</span> <span class="type">Map</span>&lt;<span class="type">ServerLevel</span>, <span class="type">DungeonManager</span>&gt; INSTANCES = <span class="kw">new</span> <span class="type">WeakHashMap</span>&lt;&gt;();
+    <span class="kw">private final</span> <span class="type">ServerLevel</span> level;
+    <span class="kw">private final</span> <span class="type">Map</span>&lt;<span class="type">ResourceLocation</span>, <span class="type">DungeonInstance</span>&gt; activeDungeons = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+    <span class="kw">private final</span> <span class="type">Map</span>&lt;<span class="type">UUID</span>, <span class="type">ResourceLocation</span>&gt; playerToDungeon = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+    <span class="kw">public static</span> <span class="type">DungeonManager</span> get(<span class="type">ServerLevel</span> level) {
+        <span class="kw">return</span> INSTANCES.computeIfAbsent(level, <span class="type">DungeonManager</span>::<span class="kw">new</span>);
+    }
+
+    <span class="ann">@SubscribeEvent</span>
+    <span class="kw">public void</span> onServerTick(<span class="type">ServerTickEvent.Post</span> event) {
+        <span class="kw">for</span> (<span class="type">DungeonInstance</span> dungeon : activeDungeons.values()) {
+            dungeon.tick(level);
+            <span class="kw">for</span> (<span class="type">ServerPlayer</span> player : getPlayersInDungeon(dungeon)) {
+                checkRoomTransition(dungeon, player);
+            }
+        }
+    }
+
+    <span class="kw">private void</span> checkRoomTransition(<span class="type">DungeonInstance</span> dungeon, <span class="type">ServerPlayer</span> player) {
+        <span class="type">RoomInstance</span> current = dungeon.getRoomForPlayer(player);
+        <span class="type">RoomInstance</span> newRoom = dungeon.findRoomAt(player.blockPosition());
+        <span class="kw">if</span> (newRoom != <span class="kw">null</span> && newRoom != current) {
+            <span class="kw">if</span> (current != <span class="kw">null</span>) { current.onPlayerExit(player); deactivateIfEmpty(current); }
+            activateRoom(newRoom, player);
+            dungeon.setPlayerRoom(player, newRoom);
+            <span class="type">CDENetworking</span>.sendToPlayer(player, <span class="kw">new</span> <span class="type">RoomSyncPayload</span>(newRoom.getId(), newRoom.getState().ordinal()));
+        }
+    }
+
+    <span class="kw">private void</span> activateRoom(<span class="type">RoomInstance</span> room, <span class="type">ServerPlayer</span> player) {
+        <span class="kw">if</span> (room.getState() == <span class="type">RoomState</span>.UNLOADED || room.getState() == <span class="type">RoomState</span>.DORMANT)
+            room.setState(<span class="type">RoomState</span>.PREPARED);
+        <span class="kw">if</span> (room.getState() == <span class="type">RoomState</span>.PREPARED) {
+            room.setState(<span class="type">RoomState</span>.ACTIVE);
+            room.onPlayerEnter(player);
+            room.enableTick();
+        }
+    }
+
+    <span class="kw">public boolean</span> isPlayerInDungeon(<span class="type">ServerPlayer</span> p) { <span class="kw">return</span> playerToDungeon.containsKey(p.getUUID()); }
+    <span class="kw">public</span> <span class="type">RoomInstance</span> getCurrentRoom(<span class="type">ServerPlayer</span> p) {
+        <span class="type">ResourceLocation</span> id = playerToDungeon.get(p.getUUID());
+        <span class="kw">return</span> id == <span class="kw">null</span> ? <span class="kw">null</span> : activeDungeons.get(id).getRoomForPlayer(p);
+    }
+}
+</pre></div>
+
+<div id="code-brain">
+<h3>7.10 SmartBrainLib (AI de Boss)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.entity.ai;
+
+<span class="kw">import</span> net.tslat.smartbrainlib.api.SmartBrainOwner;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.BrainActivityGroup;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.behaviour.custom.attack.AnimatableMeleeAttack;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
+<span class="kw">import</span> net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
+<span class="kw">import</span> java.util.List;
+
+<span class="kw">public class</span> <span class="type">DyingAtlasBrainProvider</span> <span class="kw">implements</span> <span class="type">SmartBrainOwner</span>&lt;<span class="type">DyingAtlasEntity</span>&gt; {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">List</span>&lt;<span class="type">ExtendedSensor</span>&lt;<span class="type">DyingAtlasEntity</span>&gt;&gt; getSensors() {
+        <span class="kw">return</span> <span class="type">List</span>.of(
+            <span class="kw">new</span> <span class="type">NearbyPlayersSensor</span>&lt;&gt;(),
+            <span class="kw">new</span> <span class="type">CDEVibrationSensor</span>&lt;&gt;(),
+            <span class="kw">new</span> <span class="type">CDEPhaseHealthSensor</span>&lt;&gt;()
+        );
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">BrainActivityGroup</span>&lt;<span class="type">DyingAtlasEntity</span>&gt; getCoreTasks() {
+        <span class="kw">return</span> <span class="type">BrainActivityGroup</span>.coreTasks(<span class="kw">new</span> <span class="type">LookAtTarget</span>&lt;&gt;(), <span class="kw">new</span> <span class="type">MoveToWalkTarget</span>&lt;&gt;());
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">BrainActivityGroup</span>&lt;<span class="type">DyingAtlasEntity</span>&gt; getFightTasks() {
+        <span class="kw">return</span> <span class="type">BrainActivityGroup</span>.fightTasks(
+            <span class="kw">new</span> <span class="type">FirstApplicableBehaviour</span>&lt;&gt;(
+                <span class="cmt">// Fase 1: Melee pesado</span>
+                <span class="kw">new</span> <span class="type">CDEPhaseConditionalBehavior</span>&lt;&gt;(<span class="type">BossPhase</span>.PHASE_1,
+                    <span class="kw">new</span> <span class="type">AnimatableMeleeAttack</span>&lt;&gt;(<span class="num">20</span>).attackInterval(e -&gt; <span class="num">40</span>)),
+                <span class="cmt">// Fase 2: Area + telegrafado</span>
+                <span class="kw">new</span> <span class="type">CDEPhaseConditionalBehavior</span>&lt;&gt;(<span class="type">BossPhase</span>.PHASE_2,
+                    <span class="kw">new</span> <span class="type">CDETelegraphedAreaAttack</span>&lt;&gt;(<span class="num">3.0f</span>, <span class="num">60</span>)),
+                <span class="cmt">// Fase 3: Enrage rapido</span>
+                <span class="kw">new</span> <span class="type">CDEPhaseConditionalBehavior</span>&lt;&gt;(<span class="type">BossPhase</span>.PHASE_3,
+                    <span class="kw">new</span> <span class="type">AnimatableMeleeAttack</span>&lt;&gt;(<span class="num">30</span>).attackInterval(e -&gt; <span class="num">15</span>))
+            )
+        );
+    }
+}
+</pre></div>
+
+<div id="code-curios">
+<h3>7.11 Curios ICurioItem (Frost Crown)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.item.curio;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.core.registry.CDEEffects;
+<span class="kw">import</span> net.minecraft.world.effect.MobEffectInstance;
+<span class="kw">import</span> net.minecraft.world.entity.LivingEntity;
+<span class="kw">import</span> net.minecraft.world.item.Item;
+<span class="kw">import</span> net.minecraft.world.item.ItemStack;
+<span class="kw">import</span> top.theillusivec4.curios.api.type.capability.ICurioItem;
+<span class="kw">import</span> top.theillusivec4.curios.api.SlotContext;
+
+<span class="kw">public class</span> <span class="type">FrostCrownItem</span> <span class="kw">extends</span> <span class="type">Item</span> <span class="kw">implements</span> <span class="type">ICurioItem</span> {
+
+    <span class="kw">private static final int</span> AURA_RADIUS = <span class="num">4</span>;
+
+    <span class="kw">public</span> <span class="type">FrostCrownItem</span>() { <span class="kw">super</span>(<span class="kw">new</span> <span class="type">Properties</span>().stacksTo(<span class="num">1</span>).fireResistant()); }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> curioTick(<span class="type">SlotContext</span> ctx, <span class="type">ItemStack</span> stack) {
+        <span class="type">LivingEntity</span> wearer = ctx.entity();
+        <span class="cmt">// Inmunidad al frio</span>
+        wearer.removeEffect(<span class="type">CDEEffects</span>.FROST_SLOW.get());
+        wearer.removeEffect(<span class="type">CDEEffects</span>.SPECTRAL_CHILL.get());
+
+        <span class="cmt">// Aura de frio cada 20 ticks</span>
+        <span class="kw">if</span> (wearer.tickCount % <span class="num">20</span> == <span class="num">0</span> && !wearer.level().isClientSide()) {
+            wearer.level().getEntitiesOfClass(<span class="type">LivingEntity</span>.<span class="kw">class</span>,
+                wearer.getBoundingBox().inflate(AURA_RADIUS),
+                e -&gt; e != wearer && e.isAlive() && !e.isAlliedTo(wearer)
+            ).forEach(enemy -&gt; enemy.addEffect(
+                <span class="kw">new</span> <span class="type">MobEffectInstance</span>(<span class="type">CDEEffects</span>.FROST_SLOW.get(), <span class="num">40</span>, <span class="num">0</span>, <span class="kw">false</span>, <span class="kw">true</span>)));
+        }
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> onEquip(<span class="type">SlotContext</span> ctx, <span class="type">ItemStack</span> prev, <span class="type">ItemStack</span> stack) {
+        <span class="cmt">// Mensaje al equipar</span>
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> onUnequip(<span class="type">SlotContext</span> ctx, <span class="type">ItemStack</span> newStack, <span class="type">ItemStack</span> stack) {
+        <span class="cmt">// Remover bonuses</span>
+    }
+}
+</pre></div>
+<div id="code-particles">
+<h3>7.12 AAA Particles (Effect Spawning)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.client.particle;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.ColossalDungeons;
+<span class="kw">import</span> net.minecraft.core.BlockPos;
+<span class="kw">import</span> net.minecraft.resources.ResourceLocation;
+<span class="kw">import</span> net.minecraft.world.entity.Entity;
+<span class="kw">import</span> net.minecraft.world.phys.Vec3;
+<span class="kw">import</span> shimmermare.aaaparticles.client.EffekseerEffect;
+<span class="kw">import</span> shimmermare.aaaparticles.client.EffekseerManager;
+<span class="kw">import</span> java.util.*;
+
+<span class="cmt">/** Client-only effect manager. Pool de instancias + bone attachment. */</span>
+<span class="kw">public class</span> <span class="type">CDEEffectManager</span> {
+
+    <span class="kw">private static final</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">ResourceLocation</span>&gt; CACHE = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+    <span class="kw">private static final</span> <span class="type">List</span>&lt;<span class="type">CDEEffectInstance</span>&gt; ACTIVE = <span class="kw">new</span> <span class="type">ArrayList</span>&lt;&gt;();
+    <span class="kw">private static final int</span> MAX = <span class="num">64</span>;
+
+    <span class="kw">public static void</span> spawnAtPosition(<span class="type">String</span> id, <span class="type">Vec3</span> pos, <span class="kw">float</span> scale) {
+        <span class="kw">if</span> (ACTIVE.size() &gt;= MAX) ACTIVE.removeFirst().stop();
+        <span class="type">ResourceLocation</span> loc = CACHE.computeIfAbsent(id,
+            i -&gt; <span class="type">ResourceLocation</span>.fromNamespaceAndPath(<span class="type">ColossalDungeons</span>.MOD_ID, <span class="str">"effects/"</span> + i));
+        <span class="type">EffekseerEffect</span> fx = <span class="type">EffekseerManager</span>.spawn(loc, pos.x(), pos.y(), pos.z(), scale);
+        <span class="kw">if</span> (fx != <span class="kw">null</span>) ACTIVE.add(<span class="kw">new</span> <span class="type">CDEEffectInstance</span>(fx, id));
+    }
+
+    <span class="kw">public static void</span> spawnOnBone(<span class="type">String</span> id, <span class="type">Entity</span> entity, <span class="type">String</span> bone, <span class="kw">float</span> scale) {
+        <span class="type">ResourceLocation</span> loc = CACHE.computeIfAbsent(id,
+            i -&gt; <span class="type">ResourceLocation</span>.fromNamespaceAndPath(<span class="type">ColossalDungeons</span>.MOD_ID, <span class="str">"effects/"</span> + i));
+        <span class="type">EffekseerEffect</span> fx = <span class="type">EffekseerManager</span>.spawn(loc, entity.getX(), entity.getY(), entity.getZ(), scale);
+        <span class="kw">if</span> (fx != <span class="kw">null</span>) {
+            <span class="type">CDEEffectInstance</span> inst = <span class="kw">new</span> <span class="type">CDEEffectInstance</span>(fx, id);
+            inst.attachToBone(entity, bone);
+            ACTIVE.add(inst);
+        }
+    }
+
+    <span class="kw">public static void</span> spawnVanillaFeedback(<span class="type">String</span> type, <span class="type">BlockPos</span> pos) {
+        <span class="type">Vec3</span> center = <span class="type">Vec3</span>.atCenterOf(pos);
+        <span class="kw">switch</span> (type) {
+            <span class="kw">case</span> <span class="str">"bone_meal_cleanse"</span> -&gt; spawnAtPosition(<span class="str">"cleanse_sparkle"</span>, center, <span class="num">1.2f</span>);
+            <span class="kw">case</span> <span class="str">"water_extinguish"</span> -&gt; spawnAtPosition(<span class="str">"steam_burst"</span>, center, <span class="num">1.5f</span>);
+            <span class="kw">case</span> <span class="str">"honey_coat"</span> -&gt; spawnAtPosition(<span class="str">"golden_shimmer"</span>, center, <span class="num">0.8f</span>);
+            <span class="kw">case</span> <span class="str">"powder_snow_platform"</span> -&gt; spawnAtPosition(<span class="str">"frost_crystallize"</span>, center, <span class="num">1.0f</span>);
+        }
+    }
+
+    <span class="kw">public static void</span> spawnTrapEffect(<span class="type">BlockPos</span> pos, <span class="type">String</span> trapType, <span class="kw">int</span> intensity) {
+        spawnAtPosition(<span class="str">"trap_"</span> + trapType, <span class="type">Vec3</span>.atCenterOf(pos), <span class="num">0.5f</span> + intensity * <span class="num">0.3f</span>);
+    }
+
+    <span class="kw">public static void</span> tick() {
+        ACTIVE.removeIf(<span class="type">CDEEffectInstance</span>::isFinished);
+        ACTIVE.forEach(<span class="type">CDEEffectInstance</span>::updatePosition);
+    }
+}
+</pre></div>
+
+<div id="code-datadriven">
+<h3>7.13 Data-Driven Trap Loader (JSON Config)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.dungeon.trap;
+
+<span class="kw">import</span> com.google.gson.*;
+<span class="kw">import</span> com.mojang.serialization.Codec;
+<span class="kw">import</span> com.mojang.serialization.JsonOps;
+<span class="kw">import</span> com.mojang.serialization.codecs.RecordCodecBuilder;
+<span class="kw">import</span> net.minecraft.resources.ResourceLocation;
+<span class="kw">import</span> net.minecraft.server.packs.resources.*;
+<span class="kw">import</span> net.minecraft.util.profiling.ProfilerFiller;
+<span class="kw">import</span> java.util.*;
+
+<span class="cmt">/** Carga trampas desde data/cde/traps/*.json. Datapacks pueden override. */</span>
+<span class="kw">public class</span> <span class="type">TrapConfigLoader</span> <span class="kw">extends</span> <span class="type">SimpleJsonResourceReloadListener</span> {
+
+    <span class="kw">private static final</span> <span class="type">Map</span>&lt;<span class="type">ResourceLocation</span>, <span class="type">TrapConfig</span>&gt; CONFIGS = <span class="kw">new</span> <span class="type">HashMap</span>&lt;&gt;();
+
+    <span class="kw">public</span> <span class="type">TrapConfigLoader</span>() { <span class="kw">super</span>(<span class="kw">new</span> <span class="type">Gson</span>(), <span class="str">"traps"</span>); }
+
+    <span class="ann">@Override</span>
+    <span class="kw">protected void</span> apply(<span class="type">Map</span>&lt;<span class="type">ResourceLocation</span>, <span class="type">JsonElement</span>&gt; data, <span class="type">ResourceManager</span> rm, <span class="type">ProfilerFiller</span> p) {
+        CONFIGS.clear();
+        data.forEach((id, json) -&gt; {
+            <span class="type">TrapConfig</span>.CODEC.parse(<span class="type">JsonOps</span>.INSTANCE, json)
+                .resultOrPartial(e -&gt; {}).ifPresent(cfg -&gt; CONFIGS.put(id, cfg));
+        });
+    }
+
+    <span class="kw">public static</span> <span class="type">Optional</span>&lt;<span class="type">TrapConfig</span>&gt; get(<span class="type">ResourceLocation</span> id) { <span class="kw">return</span> <span class="type">Optional</span>.ofNullable(CONFIGS.get(id)); }
+}
+
+<span class="kw">public record</span> <span class="type">TrapConfig</span>(<span class="type">String</span> type, <span class="type">ActivatorConfig</span> activator, <span class="type">DamageConfig</span> damage,
+    <span class="type">TimingConfig</span> timing, <span class="type">List</span>&lt;<span class="type">String</span>&gt; vanillaInteractions, <span class="type">List</span>&lt;<span class="type">String</span>&gt; chainReactions,
+    <span class="type">String</span> vfxId, <span class="kw">boolean</span> repeatable, <span class="kw">int</span> cooldownTicks) {
+
+    <span class="kw">public static final</span> <span class="type">Codec</span>&lt;<span class="type">TrapConfig</span>&gt; CODEC = <span class="type">RecordCodecBuilder</span>.create(i -&gt; i.group(
+        <span class="type">Codec</span>.STRING.fieldOf(<span class="str">"type"</span>).forGetter(<span class="type">TrapConfig</span>::type),
+        <span class="type">ActivatorConfig</span>.CODEC.fieldOf(<span class="str">"activator"</span>).forGetter(<span class="type">TrapConfig</span>::activator),
+        <span class="type">DamageConfig</span>.CODEC.fieldOf(<span class="str">"damage"</span>).forGetter(<span class="type">TrapConfig</span>::damage),
+        <span class="type">TimingConfig</span>.CODEC.fieldOf(<span class="str">"timing"</span>).forGetter(<span class="type">TrapConfig</span>::timing),
+        <span class="type">Codec</span>.STRING.listOf().fieldOf(<span class="str">"vanilla_interactions"</span>).forGetter(<span class="type">TrapConfig</span>::vanillaInteractions),
+        <span class="type">Codec</span>.STRING.listOf().fieldOf(<span class="str">"chain_reactions"</span>).forGetter(<span class="type">TrapConfig</span>::chainReactions),
+        <span class="type">Codec</span>.STRING.fieldOf(<span class="str">"vfx_id"</span>).forGetter(<span class="type">TrapConfig</span>::vfxId),
+        <span class="type">Codec</span>.BOOL.fieldOf(<span class="str">"repeatable"</span>).forGetter(<span class="type">TrapConfig</span>::repeatable),
+        <span class="type">Codec</span>.INT.fieldOf(<span class="str">"cooldown_ticks"</span>).forGetter(<span class="type">TrapConfig</span>::cooldownTicks)
+    ).apply(i, <span class="type">TrapConfig</span>::<span class="kw">new</span>));
+}
+</pre></div>
+
+<div id="code-oil">
+<h3>7.14 Mecanica del Aceite (Bone Meal Cleanse)</h3>
+<pre>
+<span class="kw">package</span> com.colossaldungeons.enhanced.vanilla.interactions;
+
+<span class="kw">import</span> com.colossaldungeons.enhanced.core.registry.*;
+<span class="kw">import</span> com.colossaldungeons.enhanced.network.*;
+<span class="kw">import</span> com.colossaldungeons.enhanced.vanilla.*;
+<span class="kw">import</span> net.minecraft.server.level.ServerLevel;
+<span class="kw">import</span> net.minecraft.server.level.ServerPlayer;
+<span class="kw">import</span> net.minecraft.sounds.SoundSource;
+<span class="kw">import</span> net.minecraft.world.effect.MobEffectInstance;
+<span class="kw">import</span> net.minecraft.world.item.Items;
+
+<span class="cmt">/**
+ * Bone Meal + Oil = Cleanse + 30min protection.
+ * 1. Jugador pisa OilSurfaceBlock -> OiledEffect (fuego 2x, desliza)
+ * 2. Bone Meal en OilBlock -> destruye bloque + limpia efecto
+ * 3. Bone Meal + sneaking -> self-cleanse
+ * 4. Aplica OilProtectionEffect (30 min, previene re-aplicacion)
+ */</span>
+<span class="kw">public class</span> <span class="type">BoneMealOilInteraction</span> <span class="kw">implements</span> <span class="type">IVanillaInteraction</span> {
+
+    <span class="kw">private static final int</span> PROTECTION_TICKS = <span class="num">20</span> * <span class="num">60</span> * <span class="num">30</span>; <span class="cmt">// 30 minutos</span>
+
+    <span class="ann">@Override</span>
+    <span class="kw">public boolean</span> canApply(<span class="type">InteractionContext</span> ctx) {
+        <span class="kw">if</span> (!ctx.stack().is(<span class="type">Items</span>.BONE_MEAL)) <span class="kw">return false</span>;
+        <span class="kw">boolean</span> isOilBlock = ctx.blockState() != <span class="kw">null</span>
+            && ctx.blockState().getBlock() <span class="kw">instanceof</span> <span class="type">OilSurfaceBlock</span>;
+        <span class="kw">boolean</span> playerOiled = ctx.player().hasEffect(<span class="type">CDEEffects</span>.OILED.get());
+        <span class="kw">return</span> isOilBlock || (ctx.player().isShiftKeyDown() && playerOiled);
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="type">InteractionResult</span> apply(<span class="type">InteractionContext</span> ctx) {
+        <span class="type">ServerPlayer</span> player = (<span class="type">ServerPlayer</span>) ctx.player();
+        <span class="type">ServerLevel</span> level = (<span class="type">ServerLevel</span>) ctx.level();
+
+        <span class="cmt">// Limpiar bloque</span>
+        <span class="kw">if</span> (ctx.blockState() != <span class="kw">null</span> && ctx.blockState().getBlock() <span class="kw">instanceof</span> <span class="type">OilSurfaceBlock</span>)
+            level.removeBlock(ctx.pos(), <span class="kw">false</span>);
+
+        <span class="cmt">// Limpiar efecto del jugador</span>
+        player.removeEffect(<span class="type">CDEEffects</span>.OILED.get());
+
+        <span class="cmt">// Proteccion 30 minutos</span>
+        player.addEffect(<span class="kw">new</span> <span class="type">MobEffectInstance</span>(
+            <span class="type">CDEEffects</span>.OIL_PROTECTION.get(), PROTECTION_TICKS, <span class="num">0</span>, <span class="kw">false</span>, <span class="kw">true</span>, <span class="kw">true</span>));
+
+        <span class="cmt">// Feedback: sonido + VFX</span>
+        level.playSound(<span class="kw">null</span>, player.blockPosition(),
+            <span class="type">CDESounds</span>.BONE_MEAL_CLEANSE.get(), <span class="type">SoundSource</span>.PLAYERS, <span class="num">1.0f</span>, <span class="num">1.2f</span>);
+        <span class="type">CDENetworking</span>.sendToTracking(player,
+            <span class="kw">new</span> <span class="type">VFXSpawnPayload</span>(<span class="str">"bone_meal_cleanse"</span>, ctx.pos(), <span class="num">1.2f</span>));
+
+        <span class="kw">return</span> <span class="type">InteractionResult</span>.SUCCESS;
+    }
+
+    <span class="ann">@Override</span> <span class="kw">public boolean</span> consumesItem() { <span class="kw">return true</span>; }
+    <span class="ann">@Override</span> <span class="kw">public int</span> getCooldown() { <span class="kw">return</span> <span class="num">100</span>; } <span class="cmt">// 5 seconds</span>
+}
+</pre></div>
+</section>
+<section id="networking">
+<h2><span class="section-num">8.</span> Protocolo de Red</h2>
+<p>11 payloads definidos como <code>record</code> con <code>StreamCodec</code>.</p>
+<h3>Server to Client (S2C)</h3>
+<table>
+<tr><th>Payload</th><th>Descripcion</th><th>Datos</th></tr>
+<tr><td><code>RoomSyncPayload</code></td><td>Sincroniza estado de sala</td><td>roomId, state, playerCount</td></tr>
+<tr><td><code>TrapActivatePayload</code></td><td>Dispara VFX/SFX de trampa</td><td>trapPos, trapType, intensity, radius</td></tr>
+<tr><td><code>PuzzleStatePayload</code></td><td>Progreso de puzle</td><td>puzzleId, state, progress</td></tr>
+<tr><td><code>BossPhasePayload</code></td><td>Transicion de fase</td><td>entityId, phase, cinematicId</td></tr>
+<tr><td><code>ResonanceUpdatePayload</code></td><td>Carga de cristales</td><td>crystalPos, chargeLevel</td></tr>
+<tr><td><code>DungeonEventPayload</code></td><td>Eventos globales</td><td>eventType, dungeonId, data</td></tr>
+<tr><td><code>VFXSpawnPayload</code></td><td>Spawn efectos AAA</td><td>effectId, pos, scale</td></tr>
+</table>
+<h3>Client to Server (C2S)</h3>
+<table>
+<tr><th>Payload</th><th>Descripcion</th><th>Datos</th></tr>
+<tr><td><code>PlayerInteractPayload</code></td><td>Interaccion vanilla</td><td>targetPos, itemId, action</td></tr>
+<tr><td><code>DialogueChoicePayload</code></td><td>Seleccion dialogo</td><td>npcId, nodeId, choiceIndex</td></tr>
+<tr><td><code>MechanismActivatePayload</code></td><td>Activar mecanismo</td><td>mechanismPos, action</td></tr>
+<tr><td><code>CompanionOrderPayload</code></td><td>Orden companero</td><td>companionId, order, targetPos</td></tr>
+</table>
+<h3>Seguridad C2S</h3>
+<ul><li><strong>Distancia:</strong> Jugador a menos de 5 bloques del target</li>
+<li><strong>Permisos:</strong> En dungeon activa</li>
+<li><strong>Rate limiting:</strong> 1 tick cooldown entre mismo tipo</li>
+<li><strong>Integridad:</strong> Target debe existir realmente</li></ul>
+</section>
+
+<section id="datadriven">
+<h2><span class="section-num">9.</span> Sistema Data-Driven</h2>
+<p>Todo definido via JSON en datapacks. Addons anadir/override sin codigo.</p>
+<h3>Estructura de Archivos</h3>
+<pre>data/cde/
+  dungeons/     <span class="cmt">// worldbearer.json, solar_palace.json, ...</span>
+  traps/        <span class="cmt">// spike_plate.json, flame_jet.json, ...</span>
+  puzzles/      <span class="cmt">// light_redirect.json, sound_sequence.json, ...</span>
+  creatures/    <span class="cmt">// gelatinous_cube.json, mimic.json, ...</span>
+  rooms/        <span class="cmt">// worldbearer_entrance.json, ...</span>
+  dialogues/    <span class="cmt">// valdris_merchant.json, ...</span>
+  vanilla_interactions/  <span class="cmt">// bone_meal_oil.json, honey_ice.json, ...</span>
+  mechanisms/   <span class="cmt">// hydraulic_basic.json, balance_scale.json, ...</span></pre>
+<h3>Schema: Dungeon Definition</h3>
+<div class="json-schema"><span class="json-key">"id"</span>: <span class="json-type">ResourceLocation</span>    <span class="json-key">"rooms"</span>: [<span class="json-type">RoomRef[]</span>]
+<span class="json-key">"connections"</span>: [{<span class="json-key">"from"</span>, <span class="json-key">"to"</span>, <span class="json-key">"type"</span>}]
+<span class="json-key">"rules"</span>: {<span class="json-key">"max_players"</span>: <span class="json-type">int</span>, <span class="json-key">"allow_respawn"</span>: <span class="json-type">bool</span>, <span class="json-key">"time_limit"</span>: <span class="json-type">int</span>}
+<span class="json-key">"vanilla_items"</span>: [<span class="json-type">String[]</span>]  <span class="json-key">"boss_id"</span>: <span class="json-type">ResourceLocation</span>
+<span class="json-key">"reset_config"</span>: {<span class="json-key">"type"</span>: <span class="str">"time|manual|death"</span>, <span class="json-key">"delay"</span>: <span class="json-type">int</span>}</div>
+<h3>Schema: Trap Config</h3>
+<div class="json-schema"><span class="json-key">"type"</span>: <span class="str">"spike_plate"</span>
+<span class="json-key">"activator"</span>: {<span class="json-key">"type"</span>: <span class="str">"pressure|proximity|timer|manual"</span>, <span class="json-key">"range"</span>: <span class="json-type">float</span>}
+<span class="json-key">"damage"</span>: {<span class="json-key">"amount"</span>: <span class="json-type">float</span>, <span class="json-key">"type"</span>: <span class="json-type">DamageSource</span>, <span class="json-key">"radius"</span>: <span class="json-type">float</span>, <span class="json-key">"effects"</span>: []}
+<span class="json-key">"timing"</span>: {<span class="json-key">"warning_ticks"</span>: <span class="num">15</span>, <span class="json-key">"active_ticks"</span>: <span class="num">30</span>, <span class="json-key">"retract_ticks"</span>: <span class="num">20</span>}
+<span class="json-key">"vanilla_interactions"</span>: [<span class="str">"shield_block"</span>, <span class="str">"jump_dodge"</span>]
+<span class="json-key">"vfx_id"</span>: <span class="str">"trap_spike_activate"</span>  <span class="json-key">"repeatable"</span>: <span class="kw">true</span>  <span class="json-key">"cooldown_ticks"</span>: <span class="num">80</span></div>
+<h3>Schema: Vanilla Interaction</h3>
+<div class="json-schema"><span class="json-key">"item_id"</span>: <span class="str">"minecraft:bone_meal"</span>
+<span class="json-key">"target_type"</span>: <span class="str">"block|entity|self"</span>  <span class="json-key">"target_id"</span>: <span class="str">"cde:oil_surface"</span>
+<span class="json-key">"effect"</span>: {<span class="json-key">"type"</span>: <span class="str">"remove_block|apply_effect|spawn_entity|custom"</span>}
+<span class="json-key">"conditions"</span>: [{<span class="json-key">"type"</span>: <span class="str">"in_dungeon"</span>}]
+<span class="json-key">"cooldown"</span>: <span class="num">100</span>  <span class="json-key">"consumes"</span>: <span class="kw">true</span>  <span class="json-key">"vfx_id"</span>: <span class="str">"cleanse_sparkle"</span></div>
+</section>
+<section id="effects">
+<h2><span class="section-num">10.</span> Sistema de Efectos (3 Capas)</h2>
+<h3>Capa 1: Status Effects (MobEffect)</h3>
+<table>
+<tr><th>Efecto</th><th>Descripcion</th><th>Limpiable con</th></tr>
+<tr><td><strong>Oiled</strong></td><td>Fuego 2x dano, deslizamiento, visual negro</td><td>Bone Meal, Leche, Agua</td></tr>
+<tr><td><strong>Madness</strong></td><td>Distorsion perceptiva (shaders, sonidos falsos)</td><td>Leche</td></tr>
+<tr><td><strong>Resonance Charge</strong></td><td>Sensibilidad al sonido</td><td>Alejarse de cristales</td></tr>
+<tr><td><strong>Hemorrhage</strong></td><td>Sangrado por estoque (DOT)</td><td>Leche, decay</td></tr>
+<tr><td><strong>Parasitic Poison</strong></td><td>Veneno del Leviathan (dano + nausea)</td><td>Leche</td></tr>
+<tr><td><strong>Spectral Chill</strong></td><td>Congelacion (slow + vision reducida)</td><td>Antorcha, fuego, Leche</td></tr>
+<tr><td><strong>Solar Burn</strong></td><td>Quemadura solar durante Cenit</td><td>Sombra, Powder Snow</td></tr>
+<tr><td><strong>Sanity Drain</strong></td><td>Perdida de cordura (precursor a Madness)</td><td>Sanity Candle, comida</td></tr>
+</table>
+<h3>Capa 2: Visual Effects (AAA Particles)</h3>
+<ul><li>Auras de jefe por fase</li><li>Trails de ataque telegrafado</li><li>Explosiones en transiciones</li>
+<li>Ambientales: ceniza, esporas, niebla, fuego</li><li>Feedback de interaccion vanilla</li><li>Warnings de trampa</li></ul>
+<h3>Capa 3: Environmental Effects (por Sala)</h3>
+<ul><li>Niebla volumetrica (Veiled Peak, Descent)</li><li>Campos de viento (empujan jugador)</li>
+<li>Suelos de acido (Leviathan)</li><li>Zonas luz/sombra (Solar Palace)</li>
+<li>Temperatura (fuego/hielo)</li><li>Campos resonancia</li><li>Gravedad alterada</li></ul>
+<h3>Chaining de Efectos</h3>
+<table>
+<tr><th>Combinacion</th><th>Resultado</th></tr>
+<tr><td>Oiled + Fire</td><td>Burning 2x duracion</td></tr>
+<tr><td>Water + Oiled surface</td><td>Steam explosion (dano area)</td></tr>
+<tr><td>Bone Meal + Oiled</td><td>Cleanse + 30min Protection</td></tr>
+<tr><td>Honey + Ice</td><td>No-slip coating</td></tr>
+<tr><td>Milk + Any</td><td>Clear ALL mod effects</td></tr>
+<tr><td>Cold + Fire creature</td><td>Critical damage</td></tr>
+<tr><td>TNT + Crystal</td><td>Instant overload</td></tr>
+<tr><td>Torch + Invisible</td><td>Reveal (3 block radius)</td></tr>
+</table>
+</section>
+
+<section id="oil-mechanic">
+<h2><span class="section-num">11.</span> Mecanica del Aceite (Detalle)</h2>
+<h3>Ciclo de Vida</h3>
+<div class="state-diagram">[OilSurfaceBlock en sala] --> [Jugador pisa] --> [Aplica OiledEffect nivel 1-3]
+    |
+    +--> [Toca fuego] --> Burning 2x duracion + propaga a aceite cercano
+    |
+    +--> [Bone Meal] --> Cleanse + OilProtection 30 min
+    |
+    +--> [Milk] --> Remove effect (sin protection)
+    |
+    +--> [Water Bucket en bloque] --> Steam explosion + remove block</div>
+<h3>OiledEffect (MobEffect)</h3>
+<ul><li>Duracion: 60s base (hasta 3 stacks)</li><li>+100% dano de fuego por nivel</li>
+<li>Friction -30% por nivel</li><li>Visual: overlay negro brillante</li>
+<li>Propagacion: tocar otro jugador transfiere 1 nivel</li></ul>
+<h3>OilSurfaceBlock</h3>
+<ul><li>Block sin collision (tipo alfombra)</li><li>ignitedByLava(), altamente inflamable</li>
+<li>Bone Meal: destruye + particulas verdes</li><li>Water: steam explosion (3 bloques, 2 hearts)</li>
+<li>TNT: prende TODO aceite en 10 bloques</li></ul>
+<h3>Proteccion Post-Limpieza</h3>
+<p><code>OilProtectionEffect</code> (30 min): previene re-aplicacion. Elimina frustracion en salas con mucho aceite.</p>
+</section>
+
+<section id="room-states">
+<h2><span class="section-num">12.</span> Room State Machine (Diagrama)</h2>
+<div class="state-diagram">                    [UNLOADED]
+                        |
+      jugador al sector |
+                        v
+                    [PREPARED]  --- Pre-carga assets, AI idle
+                        |
+   jugador entra bounds |
+                        v
+                     [ACTIVE]  --- Full tick, AI, VFX, trampas
+                      /    \
+    mobs muertos     /      \ jugador sale (0 players)
+                   v          v
+           [COMPLETED]    [DORMANT]  --- Suspende tick
+                 |            |
+    dungeon reset|            | jugador regresa
+                 v            v
+           [UNLOADED]      [ACTIVE]
+
+    --- Estado especial ---
+                    [SUSPENDED]  --- Jugador desconecta
+                        |          Pausa TOTAL
+                        v
+                     [ACTIVE]  (resume al reconectar)</div>
+<h3>Activacion por Estado</h3>
+<table>
+<tr><th>Sistema</th><th>UNLOADED</th><th>PREPARED</th><th>ACTIVE</th><th>COMPLETED</th><th>DORMANT</th></tr>
+<tr><td>Entity AI</td><td>OFF</td><td>Idle</td><td>ON</td><td>OFF</td><td>OFF</td></tr>
+<tr><td>BlockEntity tick</td><td>OFF</td><td>OFF</td><td>ON</td><td>OFF</td><td>OFF</td></tr>
+<tr><td>Traps</td><td>OFF</td><td>Disarmed</td><td>Armed</td><td>Disarmed</td><td>Paused</td></tr>
+<tr><td>Puzzles</td><td>OFF</td><td>Reset</td><td>ON</td><td>Solved</td><td>Paused</td></tr>
+<tr><td>VFX</td><td>OFF</td><td>Ambient</td><td>Full</td><td>Ambient</td><td>OFF</td></tr>
+<tr><td>Sound</td><td>OFF</td><td>Ambient</td><td>Full</td><td>Victory</td><td>OFF</td></tr>
+</table>
+</section>
+<section id="vanilla-system">
+<h2><span class="section-num">13.</span> Sistema de Items Vanilla</h2>
+<p>Filosofia central: items vanilla SIEMPRE tienen uso util en dungeons.</p>
+<h3>Limpieza y Proteccion</h3>
+<table>
+<tr><th>Item</th><th>Uso</th><th>Efecto</th></tr>
+<tr><td>Bone Meal</td><td>Click en aceite / sneaking</td><td>Limpia aceite + 30min proteccion</td></tr>
+<tr><td>Milk Bucket</td><td>Beber</td><td>Limpia TODOS los debuffs</td></tr>
+<tr><td>Honey Bottle</td><td>Beber</td><td>Inmunidad deslizamiento + pacifica insectos</td></tr>
+<tr><td>Water Bucket</td><td>Click en aceite/trampa fuego</td><td>Steam explosion / apaga trampa</td></tr>
+</table>
+<h3>Plataformas y Movimiento</h3>
+<table>
+<tr><th>Item</th><th>Uso</th><th>Efecto</th></tr>
+<tr><td>Powder Snow Bucket</td><td>Click sobre abismo</td><td>Plataforma temporal 15-30s</td></tr>
+<tr><td>Fishing Rod</td><td>Click en espejo/palanca/bloque</td><td>Manipula a distancia</td></tr>
+<tr><td>Ender Pearl</td><td>Lanzar</td><td>Teleport (respeta bounds)</td></tr>
+</table>
+<h3>Deteccion y Revelacion</h3>
+<table>
+<tr><th>Item</th><th>Uso</th><th>Efecto</th></tr>
+<tr><td>Spyglass</td><td>Mirar con zoom</td><td>Revela botones ocultos, distingue clones</td></tr>
+<tr><td>Torch</td><td>Colocar</td><td>Revela invisibles, previene respawns</td></tr>
+<tr><td>Sculk Sensor</td><td>Colocar</td><td>Detecta invisibles, localiza sierpes</td></tr>
+<tr><td>Recovery Compass</td><td>Sostener</td><td>Apunta a salida en laberintos</td></tr>
+</table>
+<h3>Sonido y Puzzles</h3>
+<table>
+<tr><th>Item</th><th>Uso</th><th>Efecto</th></tr>
+<tr><td>Note Block</td><td>Reproducir</td><td>Resuelve secuencias, carga cristales, calma espectros</td></tr>
+<tr><td>Bell</td><td>Activar</td><td>Frecuencia para cristales de resonancia</td></tr>
+<tr><td>TNT</td><td>Detonar</td><td>Destruye muros debiles, overload cristales. CUIDADO: prende aceite</td></tr>
+<tr><td>Pistons</td><td>Activar</td><td>Empujan bloques del mod</td></tr>
+</table>
+<h3>Pacificacion</h3>
+<table>
+<tr><th>Item</th><th>Uso</th><th>Efecto</th></tr>
+<tr><td>Food/Bread</td><td>Ofrecer</td><td>Pacifica Peregrinos, Espectros, alimenta Neotelidos</td></tr>
+<tr><td>Gold Items</td><td>Ofrecer/insertar</td><td>Activa mecanismos dorados, paga a Valdris</td></tr>
+</table>
+</section>
+
+<section id="framework">
+<h2><span class="section-num">14.</span> Framework y Principios</h2>
+<div class="card"><h4>1. Data-Driven sobre Hard-Coded</h4>
+<p>Ningun valor numerico hard-coded. Todo en JSON. Balanceo sin recompilacion.</p></div>
+<div class="card"><h4>2. Composicion sobre Herencia</h4>
+<p>Jerarquias planas (max 2 niveles). Comportamiento via interfaces y delegation.</p>
+<pre><span class="cmt">// Composicion plana:</span>
+<span class="type">DyingAtlasEntity</span> <span class="kw">extends</span> <span class="type">Monster</span> <span class="kw">implements</span> <span class="type">GeoEntity</span>, <span class="type">IBossPhase</span>, <span class="type">IMultipart</span>
+  - <span class="type">BossPhaseManager</span> phaseManager
+  - <span class="type">CDEBrainProvider</span> brainProvider
+  - <span class="type">MultipartHandler</span> multipart</pre></div>
+<div class="card"><h4>3. Event-Driven Communication</h4>
+<p>Sistemas no se llaman directamente. Todo via NeoForge Event Bus.</p></div>
+<div class="card"><h4>4. Lazy Activation</h4>
+<p>Solo 1-3 salas activas. AI solo tick en ACTIVE. VFX solo render en frustum.</p></div>
+<div class="card"><h4>5. Vanilla-First</h4>
+<p>Items vanilla siempre utiles. Bone Meal limpia aceite, Water apaga fuego, Fishing Rod manipula.</p></div>
+<div class="card"><h4>6. API Publica</h4>
+<p>Paquete <code>api</code> expone interfaces estables para addons.</p></div>
+<div class="card"><h4>7. Testeable</h4>
+<p>Interfaces para mock. Records inmutables y predecibles.</p></div>
+
+<h3>Core Interfaces</h3>
+<table>
+<tr><th>Interface</th><th>Proposito</th></tr>
+<tr><td><code>IDungeonContent</code></td><td>Cualquier contenido de dungeon</td></tr>
+<tr><td><code>ITrap</code></td><td>Trampa registrable</td></tr>
+<tr><td><code>IPuzzle</code></td><td>Puzle registrable</td></tr>
+<tr><td><code>IMechanism</code></td><td>Mecanismo interactivo</td></tr>
+<tr><td><code>ICreatureAI</code></td><td>AI personalizable</td></tr>
+<tr><td><code>IVanillaInteraction</code></td><td>Interaccion con item vanilla</td></tr>
+<tr><td><code>IRoomEffect</code></td><td>Efecto ambiental de sala</td></tr>
+<tr><td><code>IAddonProvider</code></td><td>Proveedor de contenido addon</td></tr>
+<tr><td><code>IBossPhase</code></td><td>Fase de jefe</td></tr>
+<tr><td><code>IDialogueNode</code></td><td>Nodo de dialogo</td></tr>
+<tr><td><code>ICompanionBehavior</code></td><td>Comportamiento companero</td></tr>
+<tr><td><code>IResonanceReceiver</code></td><td>Receptor de vibracion</td></tr>
+</table>
+
+<h3>Convenciones de Nombres</h3>
+<table>
+<tr><th>Patron</th><th>Convencion</th><th>Ejemplo</th></tr>
+<tr><td>Registries</td><td>CDE + Tipo plural</td><td>CDEBlocks, CDEItems</td></tr>
+<tr><td>IDs</td><td>snake_case</td><td>"oil_surface", "gelatinous_cube"</td></tr>
+<tr><td>Interfaces API</td><td>I + PascalCase</td><td>ITrap, IPuzzle</td></tr>
+<tr><td>Eventos</td><td>Sustantivo + Event</td><td>RoomActivatedEvent</td></tr>
+<tr><td>Payloads</td><td>Sustantivo + Payload</td><td>TrapActivatePayload</td></tr>
+<tr><td>Configs</td><td>Sustantivo + Config</td><td>TrapConfig</td></tr>
+<tr><td>Handlers</td><td>Sustantivo + Handler</td><td>VanillaInteractionHandler</td></tr>
+</table>
+</section>
+
+<hr style="border:none;border-top:1px solid var(--line);margin:3rem 0 2rem">
+<footer style="text-align:center;color:var(--text-mute);font-size:.85rem;padding-bottom:3rem">
+<p><strong>Colossal Dungeons Enhanced</strong> - Plan Tecnico de Implementacion Completo</p>
+<p>NeoForge 1.21.1 &bull; Java 21 &bull; Mojang Official Mappings &bull; GeckoLib 4.x &bull; AAA Particles &bull; SmartBrainLib &bull; Curios API</p>
+<p>Todos los ejemplos de codigo son compilables con las dependencias correctas instaladas.</p>
+</footer>
+</main>
+<script>
+document.addEventListener('click',function(e){if(e.target.closest('.sidebar a'))document.querySelector('.sidebar').classList.remove('open')});
+const obs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){const id=entry.target.id;document.querySelectorAll('.sidebar a').forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+id)})}})},{rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('section[id],div[id]').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
