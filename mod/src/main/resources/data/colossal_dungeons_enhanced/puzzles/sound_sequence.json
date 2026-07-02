@@ -1,0 +1,11 @@
+{
+  "type": "sound_sequence",
+  "solution": ["note_c", "note_e", "note_g", "note_c_high"],
+  "max_attempts": 3,
+  "time_limit_ticks": 6000,
+  "rewards": ["colossal_dungeons_enhanced:loot/puzzle_reward_common"],
+  "hints": [
+    "The melody ascends like a triad...",
+    "Do, Mi, Sol, and once more from the top."
+  ]
+}

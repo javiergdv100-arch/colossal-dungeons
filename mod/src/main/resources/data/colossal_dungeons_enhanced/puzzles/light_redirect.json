@@ -1,0 +1,12 @@
+{
+  "type": "light_redirect",
+  "solution": ["mirror_north", "mirror_east", "mirror_south_45", "target_hit"],
+  "max_attempts": 5,
+  "time_limit_ticks": 12000,
+  "rewards": ["colossal_dungeons_enhanced:loot/puzzle_reward_rare"],
+  "hints": [
+    "Light must reach the crystal at the far end.",
+    "Rotate the mirrors to redirect the beam.",
+    "North, then East, then at an angle South."
+  ]
+}

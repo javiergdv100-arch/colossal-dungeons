@@ -1,0 +1,24 @@
+{
+  "type": "flame_jet",
+  "activator": {
+    "type": "proximity",
+    "range": 4.0,
+    "delay": 20
+  },
+  "damage": {
+    "amount": 4.0,
+    "type": "fire",
+    "radius": 3.0,
+    "effects": ["burning"]
+  },
+  "timing": {
+    "warning_ticks": 20,
+    "active_ticks": 60,
+    "retract_ticks": 10
+  },
+  "vanilla_interactions": ["water_extinguish", "powder_snow_block"],
+  "chain_reactions": ["oil_ignite"],
+  "vfx_id": "colossal_dungeons_enhanced:flame_burst",
+  "repeatable": true,
+  "cooldown_ticks": 120
+}

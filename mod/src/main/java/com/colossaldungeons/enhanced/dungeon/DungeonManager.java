@@ -160,6 +160,24 @@ public class DungeonManager {
     }
 
     /**
+     * Called when a dungeon boss is defeated at the given position.
+     * Finds the dungeon containing that position and triggers completion logic.
+     *
+     * @param bossPos the position where the boss was defeated
+     */
+    public void onBossDefeated(BlockPos bossPos) {
+        for (DungeonInstance dungeon : activeDungeons.values()) {
+            if (dungeon.getState() == DungeonState.ACTIVE && dungeon.findRoomAt(bossPos) != null) {
+                dungeon.setState(DungeonState.COMPLETED);
+                NeoForge.EVENT_BUS.post(new DungeonCompletedEvent(null, dungeon));
+                LOGGER.info("Boss defeated in dungeon {}, marking as completed", dungeon.getId());
+                return;
+            }
+        }
+        LOGGER.debug("Boss defeated at {} but no active dungeon found at that position", bossPos);
+    }
+
+    /**
      * Gets all active dungeons in this level.
      */
     public Collection<DungeonInstance> getActiveDungeons() {
