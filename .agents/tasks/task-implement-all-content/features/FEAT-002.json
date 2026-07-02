@@ -1,0 +1,39 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Implement all Worldbearer creatures (8 remaining - DyingAtlas already done) and Hollow Leviathan creatures (9). Total: 17 entity classes.",
+  "status": "in_progress",
+  "steps": [
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/WalkingFragmentEntity.java - 28HP, 6 armor, 6 dmg. Stone chunk that blocks paths, resistant to slashing, weak to blunt. Drops usable weight blocks on death.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/BallastPilgrimEntity.java - 24HP, 2 armor, 7 dmg. Fanatic carrying counterweight blocks, drops heavy block on death that can activate mechanisms.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/CounterweightGuardianEntity.java - 46HP, 6 armor, 10 dmg + knockback. Stone automaton with charged mace attack (more wait = more damage). Vulnerable during recovery.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/LithicSwarmEntity.java - 3HP each (swarm entity), 2 dmg. Cloud of living pebbles that erodes armor on continuous contact. Vulnerable to AoE and water.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/LesserAtlasEntity.java - 140HP elite, 8 armor, 12 dmg. Holds ceiling section; killing it causes controlled collapse. Strategic kill/preserve decision.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/FoundationWyrmEntity.java - 120HP elite, 5 armor, 11 dmg. Rock worm with burrow/ambush AI. Creates holes usable as paths. Weak post-emergence.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/LivingVertebraEntity.java - 260HP miniboss multipart, 7 armor, 13 dmg. Stone serpent made of vertebra segments. Destroy segments to shorten. Protect core vertebra (lethal point).",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/CoreCustodianEntity.java - 300HP miniboss, 9 armor, 14 dmg + knockback. Controls tilting platforms, throws chained counterweight ball. Self-stuns if ball hits wall.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/ClingingParasiteEntity.java - 16HP, 4 dmg. Ceiling leech that drops onto players, drains health while attached. Weak once detached.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/AntibodyEntity.java - 12HP, 5 dmg. White defensive organism spawning in waves proportional to noise/damage. Swarm behavior.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/DevouringLarvaEntity.java - 20HP, 1 armor, 6 dmg. Crawls through digestive tracts eating drops, can grow larger. Vulnerable to fire.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/WallMawEntity.java - 36HP, 4 armor, 8 dmg + grab. Hidden mouth in walls, bites and can transport to other areas. Soft interior is weak point.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/SpittingPolypEntity.java - 22HP, ranged acid 7 dmg. Fixed polyp on walls/ceilings that spits acid and leaves puddles. Immobile, easy at close range.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/MembraneWeaverEntity.java - 110HP elite, 3 armor, 9 dmg. Seals passages with living tissue, creates cocoons that spawn mobs. Flees to re-seal if overwhelmed.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/FalseHeartEntity.java - 150HP elite, 5 armor, wave 10 dmg. Decoy organ with rhythmic push waves, pumps Antibodies each beat. NOT the real heart.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/NerveClusterEntity.java - 320HP miniboss multipart, 4 armor, 12 dmg. Ganglion network controlling room defenses. Cut branches to disable defenses.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/SovereignParasiteEntity.java - 1300HP boss, 6 armor, 15-21 dmg. 3-phase parasite controlling the leviathan heart. Phase 1: tentacle roots + spawns. Phase 2: retreats behind living ribs. Phase 3: global leviathan spasm. Roots are independent cuttable parts. Implement IBossPhase."
+  ],
+  "acceptance_criteria": [
+    "All 17 entity Java files compile with correct Java 21 syntax",
+    "Each entity extends CDEGeoEntity and implements GeoEntity",
+    "Each has static createAttributes() matching data.js stats",
+    "Boss/miniboss entities (LivingVertebra, CoreCustodian, NerveCluster, SovereignParasite) implement IBossPhase where appropriate",
+    "Proper AI patterns: SmartBrainLib for complex entities, vanilla goals for simpler ones"
+  ],
+  "verification": [
+    "Check all 17 files exist",
+    "Verify package declarations and imports are correct",
+    "Verify HP/damage/armor values match data.js"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

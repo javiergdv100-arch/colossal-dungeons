@@ -132,6 +132,122 @@ public class CDEEntities {
             .fireImmune()
             .build(ColossalDungeons.MOD_ID + ":shattered_sovereign"));
 
+    // ===== Worldbearer Dungeon Entities =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> WALKING_FRAGMENT =
+        ENTITIES.register("walking_fragment", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.2f, 1.4f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":walking_fragment"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> BALLAST_PILGRIM =
+        ENTITIES.register("ballast_pilgrim", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 2.0f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":ballast_pilgrim"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> COUNTERWEIGHT_GUARDIAN =
+        ENTITIES.register("counterweight_guardian", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.4f, 2.8f)
+            .clientTrackingRange(12)
+            .build(ColossalDungeons.MOD_ID + ":counterweight_guardian"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> LITHIC_SWARM =
+        ENTITIES.register("lithic_swarm", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.0f, 1.0f)
+            .clientTrackingRange(8)
+            .build(ColossalDungeons.MOD_ID + ":lithic_swarm"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> LESSER_ATLAS =
+        ENTITIES.register("lesser_atlas", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.0f, 3.5f)
+            .clientTrackingRange(14)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":lesser_atlas"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> FOUNDATION_WYRM =
+        ENTITIES.register("foundation_wyrm", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.0f, 1.5f)
+            .clientTrackingRange(14)
+            .build(ColossalDungeons.MOD_ID + ":foundation_wyrm"));
+
+    // ===== Worldbearer Bosses =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> LIVING_VERTEBRA =
+        ENTITIES.register("living_vertebra", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.5f, 2.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":living_vertebra"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> CORE_CUSTODIAN =
+        ENTITIES.register("core_custodian", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.8f, 3.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":core_custodian"));
+
+    // ===== Hollow Leviathan Dungeon Entities =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> CLINGING_PARASITE =
+        ENTITIES.register("clinging_parasite", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 0.4f)
+            .clientTrackingRange(8)
+            .build(ColossalDungeons.MOD_ID + ":clinging_parasite"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> ANTIBODY =
+        ENTITIES.register("antibody", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 0.6f)
+            .clientTrackingRange(8)
+            .build(ColossalDungeons.MOD_ID + ":antibody"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> DEVOURING_LARVA =
+        ENTITIES.register("devouring_larva", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 0.4f)
+            .clientTrackingRange(8)
+            .build(ColossalDungeons.MOD_ID + ":devouring_larva"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> WALL_MAW =
+        ENTITIES.register("wall_maw", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.2f, 1.2f)
+            .clientTrackingRange(8)
+            .build(ColossalDungeons.MOD_ID + ":wall_maw"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> SPITTING_POLYP =
+        ENTITIES.register("spitting_polyp", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 0.8f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":spitting_polyp"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> MEMBRANE_WEAVER =
+        ENTITIES.register("membrane_weaver", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.4f, 1.8f)
+            .clientTrackingRange(12)
+            .build(ColossalDungeons.MOD_ID + ":membrane_weaver"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> FALSE_HEART =
+        ENTITIES.register("false_heart", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.0f, 2.0f)
+            .clientTrackingRange(14)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":false_heart"));
+
+    // ===== Hollow Leviathan Bosses =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> NERVE_CLUSTER =
+        ENTITIES.register("nerve_cluster", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.0f, 2.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":nerve_cluster"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> SOVEREIGN_PARASITE =
+        ENTITIES.register("sovereign_parasite", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(3.0f, 4.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":sovereign_parasite"));
+
     public static void register(IEventBus bus) {
         ENTITIES.register(bus);
     }
