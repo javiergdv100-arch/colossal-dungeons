@@ -2,7 +2,9 @@ package com.colossaldungeons.enhanced;
 
 import com.colossaldungeons.enhanced.core.config.CDEConfig;
 import com.colossaldungeons.enhanced.core.registry.*;
+import com.colossaldungeons.enhanced.dungeon.trap.TrapRegistry;
 import com.colossaldungeons.enhanced.network.CDENetworking;
+import com.colossaldungeons.enhanced.vanilla.InteractionRegistry;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -42,6 +44,8 @@ public class ColossalDungeons {
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            InteractionRegistry.initialize();
+            TrapRegistry.initialize();
             LOGGER.info("CDE common setup complete");
         });
     }
