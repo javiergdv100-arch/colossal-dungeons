@@ -1,0 +1,48 @@
+{
+  "id": "FEAT-005",
+  "type": "feat",
+  "description": "Implement the Entity/Mob system with GeckoLib integration, Boss framework with phase management, SmartBrainLib AI, NPC/Dialogue system, and Companion system. Includes concrete example entities.",
+  "status": "in_progress",
+  "steps": [
+    "Create CDEGeoEntity.java base class in entity/ extending PathfinderMob implementing GeoEntity: standard cache, registerControllers template, createAttributes helper.",
+    "Create GelatinousCubeEntity.java in entity/ following section 7.4 exactly: idle/move/attack animations, 80 HP, 0.18 speed, 8 damage.",
+    "Create MimicEntity.java in entity/ with disguise mechanic (looks like chest, activates on proximity).",
+    "Create IBossPhase.java interface in api/: getCurrentPhase(), transitionToPhase(), getPhaseHealth(), getPhaseAttacks().",
+    "Create BossPhaseManager.java in entity/boss/ managing phase transitions based on health thresholds, firing BossPhasePayload on transition.",
+    "Create DyingAtlasEntity.java in entity/boss/ following section 7.5: BossPhase enum (DORMANT through DEATH), AnimationController with phase-based animations, transitionToPhase method with network sync.",
+    "Create CDEBrainProvider.java base in entity/ai/ implementing SmartBrainOwner: template for sensors, core tasks, fight tasks.",
+    "Create DyingAtlasBrainProvider.java in entity/ai/ following section 7.10: NearbyPlayersSensor, CDEVibrationSensor, CDEPhaseHealthSensor, phase-conditional attack behaviors.",
+    "Create custom sensors in entity/ai/: CDEVibrationSensor.java, CDEPhaseHealthSensor.java, CDELightLevelSensor.java, CDEPlayerProximitySensor.java.",
+    "Create CDEPhaseConditionalBehavior.java in entity/ai/ for phase-gated attack patterns.",
+    "Create CDETelegraphedAreaAttack.java in entity/ai/ for telegraphed boss attacks.",
+    "Create DialogueTree.java in entity/npc/ with tree structure: nodes, choices, conditions, actions.",
+    "Create DialogueNode.java record in entity/npc/: id, text, List<DialogueChoice>, condition.",
+    "Create DialogueChoice.java record in entity/npc/: text, nextNodeId, condition, action.",
+    "Create DialogueCondition.java interface in entity/npc/ with test(ServerPlayer) method and implementations: HasItemCondition, ReputationCondition, QuestStateCondition.",
+    "Create NPCMemory.java in entity/npc/ tracking per-player interaction history and reputation.",
+    "Create NPCEntity.java base in entity/npc/ with dialogue tree, memory, GeckoLib animations.",
+    "Create ValdrisEntity.java in entity/npc/ - the merchant NPC with unique dialogue tree.",
+    "Create CompanionEntity.java in entity/npc/ with: CompanionState enum (FOLLOW, WAIT, ATTACK, EXPLORE), AI based on current order, inventory, participation in puzzles.",
+    "Create CompanionAI.java in entity/npc/ with behavior trees for each CompanionState.",
+    "Create CompanionOrder.java enum and CompanionInventory.java in entity/npc/.",
+    "Create ICreatureAI.java and ICompanionBehavior.java interfaces in api/."
+  ],
+  "acceptance_criteria": [
+    "CDEGeoEntity base class provides AnimatableInstanceCache and controller registration",
+    "GelatinousCubeEntity and MimicEntity are complete GeoEntity implementations",
+    "DyingAtlasEntity has full BossPhase enum with animation transitions per phase",
+    "SmartBrainLib integration with custom sensors and phase-conditional behaviors",
+    "DialogueTree supports branching conversations with conditions",
+    "NPCMemory persists per-player interaction data",
+    "CompanionEntity has 4 behavior modes with state machine",
+    "All API interfaces (IBossPhase, ICreatureAI, ICompanionBehavior) are in api/ package"
+  ],
+  "verification": [
+    "DyingAtlasEntity.transitionToPhase sends BossPhasePayload to tracking players",
+    "DyingAtlasBrainProvider has sensors and fight tasks matching section 7.10",
+    "DialogueTree can traverse nodes based on player choices",
+    "CompanionEntity responds to CompanionOrder enum values"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
