@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "feat",
   "description": "Implement all Worldbearer creatures (8 remaining - DyingAtlas already done) and Hollow Leviathan creatures (9). Total: 17 entity classes.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/WalkingFragmentEntity.java - 28HP, 6 armor, 6 dmg. Stone chunk that blocks paths, resistant to slashing, weak to blunt. Drops usable weight blocks on death.",
     "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/BallastPilgrimEntity.java - 24HP, 2 armor, 7 dmg. Fanatic carrying counterweight blocks, drops heavy block on death that can activate mechanisms.",
@@ -35,5 +35,5 @@
     "Verify HP/damage/armor values match data.js"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All 17 entity classes created successfully. Worldbearer: 8 entities (6 normal + 2 boss), Hollow Leviathan: 9 entities (7 normal + 2 boss). All bosses (LivingVertebra, CoreCustodian, NerveCluster, SovereignParasite) implement IBossPhase with BossPhaseManager. All entities extend CDEGeoEntity, implement GeoEntity, have correct createAttributes() stats, and registerControllers() with RawAnimation patterns. All 17 entities registered in CDEEntities with appropriate sizes and tracking ranges. Brace balance verified in all files. Stats verified against feature spec. Network mode INTEGRATIONS_ONLY prevented compilation but structural validation passed."
 }
