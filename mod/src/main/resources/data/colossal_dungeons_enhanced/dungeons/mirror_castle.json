@@ -1,0 +1,96 @@
+{
+  "id": "colossal_dungeons_enhanced:mirror_castle",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:mirror_castle/galeria_de_bienvenida",
+      "name": "Galeria de Bienvenida",
+      "type": "entrance",
+      "size_x": 16,
+      "size_y": 8,
+      "size_z": 24
+    },
+    {
+      "id": "colossal_dungeons_enhanced:mirror_castle/salon_de_azogue",
+      "name": "Salon de Azogue",
+      "type": "corridor",
+      "size_x": 20,
+      "size_y": 8,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:mirror_castle/laberinto_de_marcos",
+      "name": "Laberinto de Marcos",
+      "type": "puzzle",
+      "size_x": 24,
+      "size_y": 10,
+      "size_z": 24
+    },
+    {
+      "id": "colossal_dungeons_enhanced:mirror_castle/camara_de_los_gemelos",
+      "name": "Camara de los Gemelos",
+      "type": "miniboss",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:mirror_castle/salon_del_trono_invertido",
+      "name": "Salon del Trono Invertido",
+      "type": "boss",
+      "size_x": 30,
+      "size_y": 16,
+      "size_z": 30
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:mirror_castle/galeria_de_bienvenida",
+      "to_room": "colossal_dungeons_enhanced:mirror_castle/salon_de_azogue",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:mirror_castle/salon_de_azogue",
+      "to_room": "colossal_dungeons_enhanced:mirror_castle/laberinto_de_marcos",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:mirror_castle/laberinto_de_marcos",
+      "to_room": "colossal_dungeons_enhanced:mirror_castle/camara_de_los_gemelos",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:mirror_castle/camara_de_los_gemelos",
+      "to_room": "colossal_dungeons_enhanced:mirror_castle/salon_del_trono_invertido",
+      "type": "sealed_door",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": true,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": true
+  },
+  "vanilla_items": [
+    "minecraft:shield",
+    "minecraft:spyglass",
+    "minecraft:snowball",
+    "minecraft:torch",
+    "minecraft:water_bucket",
+    "minecraft:ender_pearl",
+    "minecraft:crossbow",
+    "minecraft:fishing_rod"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:shattered_sovereign",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}

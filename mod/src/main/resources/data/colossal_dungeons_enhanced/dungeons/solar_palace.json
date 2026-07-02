@@ -1,0 +1,96 @@
+{
+  "id": "colossal_dungeons_enhanced:solar_palace",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:solar_palace/el_atrio_dorado",
+      "name": "El Atrio Dorado",
+      "type": "entrance",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 30
+    },
+    {
+      "id": "colossal_dungeons_enhanced:solar_palace/la_sala_de_espejos_solares",
+      "name": "La Sala de Espejos Solares",
+      "type": "puzzle",
+      "size_x": 22,
+      "size_y": 10,
+      "size_z": 22
+    },
+    {
+      "id": "colossal_dungeons_enhanced:solar_palace/los_jardines_ardientes",
+      "name": "Los Jardines Ardientes",
+      "type": "corridor",
+      "size_x": 16,
+      "size_y": 8,
+      "size_z": 36
+    },
+    {
+      "id": "colossal_dungeons_enhanced:solar_palace/el_observatorio_del_alba",
+      "name": "El Observatorio del Alba",
+      "type": "miniboss",
+      "size_x": 22,
+      "size_y": 12,
+      "size_z": 22
+    },
+    {
+      "id": "colossal_dungeons_enhanced:solar_palace/el_trono_del_sol",
+      "name": "El Trono del Sol",
+      "type": "boss",
+      "size_x": 30,
+      "size_y": 16,
+      "size_z": 30
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:solar_palace/el_atrio_dorado",
+      "to_room": "colossal_dungeons_enhanced:solar_palace/la_sala_de_espejos_solares",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:solar_palace/la_sala_de_espejos_solares",
+      "to_room": "colossal_dungeons_enhanced:solar_palace/los_jardines_ardientes",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:solar_palace/los_jardines_ardientes",
+      "to_room": "colossal_dungeons_enhanced:solar_palace/el_observatorio_del_alba",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:solar_palace/el_observatorio_del_alba",
+      "to_room": "colossal_dungeons_enhanced:solar_palace/el_trono_del_sol",
+      "type": "sealed_door",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": true,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": true
+  },
+  "vanilla_items": [
+    "minecraft:bone_meal",
+    "minecraft:water_bucket",
+    "minecraft:flint_and_steel",
+    "minecraft:gold_ingot",
+    "minecraft:shield",
+    "minecraft:fishing_rod",
+    "minecraft:crossbow",
+    "minecraft:powder_snow_bucket"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:chained_helios",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}

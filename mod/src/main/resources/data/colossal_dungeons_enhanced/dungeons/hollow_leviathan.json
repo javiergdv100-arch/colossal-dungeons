@@ -1,0 +1,96 @@
+{
+  "id": "colossal_dungeons_enhanced:hollow_leviathan",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:hollow_leviathan/las_fauces",
+      "name": "Las Fauces",
+      "type": "entrance",
+      "size_x": 14,
+      "size_y": 8,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:hollow_leviathan/el_tracto",
+      "name": "El Tracto",
+      "type": "corridor",
+      "size_x": 8,
+      "size_y": 6,
+      "size_z": 36
+    },
+    {
+      "id": "colossal_dungeons_enhanced:hollow_leviathan/la_camara_pulmonar",
+      "name": "La Camara Pulmonar",
+      "type": "puzzle",
+      "size_x": 22,
+      "size_y": 12,
+      "size_z": 22
+    },
+    {
+      "id": "colossal_dungeons_enhanced:hollow_leviathan/el_nido_de_nervios",
+      "name": "El Nido de Nervios",
+      "type": "miniboss",
+      "size_x": 18,
+      "size_y": 10,
+      "size_z": 18
+    },
+    {
+      "id": "colossal_dungeons_enhanced:hollow_leviathan/la_cavidad_del_corazon",
+      "name": "La Cavidad del Corazon",
+      "type": "boss",
+      "size_x": 28,
+      "size_y": 14,
+      "size_z": 28
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:hollow_leviathan/las_fauces",
+      "to_room": "colossal_dungeons_enhanced:hollow_leviathan/el_tracto",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:hollow_leviathan/el_tracto",
+      "to_room": "colossal_dungeons_enhanced:hollow_leviathan/la_camara_pulmonar",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:hollow_leviathan/la_camara_pulmonar",
+      "to_room": "colossal_dungeons_enhanced:hollow_leviathan/el_nido_de_nervios",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:hollow_leviathan/el_nido_de_nervios",
+      "to_room": "colossal_dungeons_enhanced:hollow_leviathan/la_cavidad_del_corazon",
+      "type": "sealed_door",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": true,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": true
+  },
+  "vanilla_items": [
+    "minecraft:shears",
+    "minecraft:bone_meal",
+    "minecraft:water_bucket",
+    "minecraft:torch",
+    "minecraft:honey_bottle",
+    "minecraft:egg",
+    "minecraft:milk_bucket",
+    "minecraft:flint_and_steel"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:sovereign_parasite",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "id": "colossal_dungeons_enhanced:primordial_tower",
+  "rooms": [
+    {
+      "id": "colossal_dungeons_enhanced:primordial_tower/piso_de_la_tierra",
+      "name": "Piso de la Tierra",
+      "type": "entrance",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:primordial_tower/piso_del_agua",
+      "name": "Piso del Agua",
+      "type": "corridor",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:primordial_tower/piso_del_aire",
+      "name": "Piso del Aire",
+      "type": "puzzle",
+      "size_x": 24,
+      "size_y": 20,
+      "size_z": 24
+    },
+    {
+      "id": "colossal_dungeons_enhanced:primordial_tower/piso_del_fuego",
+      "name": "Piso del Fuego",
+      "type": "puzzle",
+      "size_x": 20,
+      "size_y": 10,
+      "size_z": 20
+    },
+    {
+      "id": "colossal_dungeons_enhanced:primordial_tower/la_cuspide_del_genesis",
+      "name": "La Cuspide del Genesis",
+      "type": "boss",
+      "size_x": 28,
+      "size_y": 16,
+      "size_z": 28
+    }
+  ],
+  "connections": [
+    {
+      "from_room": "colossal_dungeons_enhanced:primordial_tower/piso_de_la_tierra",
+      "to_room": "colossal_dungeons_enhanced:primordial_tower/piso_del_agua",
+      "type": "door",
+      "bidirectional": true
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:primordial_tower/piso_del_agua",
+      "to_room": "colossal_dungeons_enhanced:primordial_tower/piso_del_aire",
+      "type": "gate",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:primordial_tower/piso_del_aire",
+      "to_room": "colossal_dungeons_enhanced:primordial_tower/piso_del_fuego",
+      "type": "sealed_door",
+      "bidirectional": false
+    },
+    {
+      "from_room": "colossal_dungeons_enhanced:primordial_tower/piso_del_fuego",
+      "to_room": "colossal_dungeons_enhanced:primordial_tower/la_cuspide_del_genesis",
+      "type": "sealed_door",
+      "bidirectional": false
+    }
+  ],
+  "rules": {
+    "max_players": 4,
+    "allow_respawn": true,
+    "time_limit_ticks": 72000,
+    "pvp_enabled": false,
+    "keep_inventory_on_death": true
+  },
+  "vanilla_items": [
+    "minecraft:water_bucket",
+    "minecraft:flint_and_steel",
+    "minecraft:snowball",
+    "minecraft:powder_snow_bucket",
+    "minecraft:bone_meal",
+    "minecraft:tnt",
+    "minecraft:lava_bucket",
+    "minecraft:ender_pearl"
+  ],
+  "boss_id": "colossal_dungeons_enhanced:primordial_concord",
+  "reset_config": {
+    "reset_delay_ticks": 6000,
+    "reset_traps": true,
+    "reset_mobs": true,
+    "reset_loot": true,
+    "reset_puzzles": true
+  }
+}
