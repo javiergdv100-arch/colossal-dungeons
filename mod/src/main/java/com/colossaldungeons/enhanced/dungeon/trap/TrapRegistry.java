@@ -25,6 +25,52 @@ public class TrapRegistry {
     public static void initialize() {
         register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "spike_plate"),
             SpikePlateTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "oil_surface"),
+            OilSurfaceTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "oil_lamp"),
+            OilLampTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "crushing_wall"),
+            CrushingWallTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "flame_pillar"),
+            FlamePillarTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "collapse"),
+            CollapseTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "skeever_cage"),
+            SkeeverCageTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "rolling_boulder"),
+            RollingBoulderTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "infinite_corridor"),
+            InfiniteCorridorTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "swinging_blade"),
+            SwingingBladeTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "wall_blades"),
+            WallBladesTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "tension_chain"),
+            TensionChainTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "deadweight_chest"),
+            DeadweightChestTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "devouring_door"),
+            DevouringDoorTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "living"),
+            LivingTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "mirror_room"),
+            MirrorRoomTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "hostile_reflection"),
+            HostileReflectionTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "blizzard"),
+            BlizzardTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "ice_slide"),
+            IceSlideTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "wind_gust"),
+            WindGustTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "disappearing_floor"),
+            DisappearingFloorTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "false_voice"),
+            FalseVoiceTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "elemental_column"),
+            ElementalColumnTrap::new);
+        register(ResourceLocation.fromNamespaceAndPath("colossal_dungeons_enhanced", "solar_ray"),
+            SolarRayTrap::new);
 
         LOGGER.info("TrapRegistry initialized with {} trap types", REGISTRY.size());
     }
