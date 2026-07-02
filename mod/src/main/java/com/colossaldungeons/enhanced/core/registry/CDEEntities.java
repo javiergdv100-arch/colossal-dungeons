@@ -248,6 +248,126 @@ public class CDEEntities {
             .fireImmune()
             .build(ColossalDungeons.MOD_ID + ":sovereign_parasite"));
 
+    // ===== Veiled Peak Dungeon Entities =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> VEILED_SOUL =
+        ENTITIES.register("veiled_soul", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.8f)
+            .clientTrackingRange(12)
+            .build(ColossalDungeons.MOD_ID + ":veiled_soul"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> PETRIFIED_CLIMBER =
+        ENTITIES.register("petrified_climber", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.9f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":petrified_climber"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> ZEPHYR_WISP =
+        ENTITIES.register("zephyr_wisp", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.5f, 0.5f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":zephyr_wisp"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> FOG_BELLRINGER =
+        ENTITIES.register("fog_bellringer", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 2.0f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":fog_bellringer"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> SPECTRAL_YAK =
+        ENTITIES.register("spectral_yak", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.4f, 1.6f)
+            .clientTrackingRange(12)
+            .build(ColossalDungeons.MOD_ID + ":spectral_yak"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> VEIL_WARDEN =
+        ENTITIES.register("veil_warden", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 2.4f)
+            .clientTrackingRange(14)
+            .build(ColossalDungeons.MOD_ID + ":veil_warden"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> FROZEN_ORACLE =
+        ENTITIES.register("frozen_oracle", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.7f, 2.2f)
+            .clientTrackingRange(14)
+            .build(ColossalDungeons.MOD_ID + ":frozen_oracle"));
+
+    // ===== Veiled Peak Bosses =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> SUMMIT_KEEPER =
+        ENTITIES.register("summit_keeper", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.0f, 3.5f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":summit_keeper"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> CROWNED_TEMPEST =
+        ENTITIES.register("crowned_tempest", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(2.5f, 4.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":crowned_tempest"));
+
+    // ===== Descent into Madness Dungeon Entities =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> THE_WHISPERER =
+        ENTITIES.register("the_whisperer", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.8f)
+            .clientTrackingRange(12)
+            .build(ColossalDungeons.MOD_ID + ":the_whisperer"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> FACELESS_PILGRIM =
+        ENTITIES.register("faceless_pilgrim", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.8f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":faceless_pilgrim"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> THE_CROWD =
+        ENTITIES.register("the_crowd", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 0.4f)
+            .clientTrackingRange(8)
+            .build(ColossalDungeons.MOD_ID + ":the_crowd"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> ROTTEN_MEMORY =
+        ENTITIES.register("rotten_memory", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.8f)
+            .clientTrackingRange(10)
+            .build(ColossalDungeons.MOD_ID + ":rotten_memory"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> HOLLOW_FENCER =
+        ENTITIES.register("hollow_fencer", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.9f)
+            .clientTrackingRange(12)
+            .build(ColossalDungeons.MOD_ID + ":hollow_fencer"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> CHOIR_OF_CRIES =
+        ENTITIES.register("choir_of_cries", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.2f, 1.4f)
+            .clientTrackingRange(14)
+            .build(ColossalDungeons.MOD_ID + ":choir_of_cries"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> THE_ONE_WHO_REPEATS =
+        ENTITIES.register("the_one_who_repeats", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 2.2f)
+            .clientTrackingRange(14)
+            .build(ColossalDungeons.MOD_ID + ":the_one_who_repeats"));
+
+    // ===== Descent into Madness Bosses =====
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> SEMBLANCE =
+        ENTITIES.register("semblance", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(0.8f, 2.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":semblance"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PathfinderMob>> BROKEN_SANITY =
+        ENTITIES.register("broken_sanity", () -> EntityType.Builder.of(PathfinderMob::new, MobCategory.MONSTER)
+            .sized(1.5f, 3.0f)
+            .clientTrackingRange(16)
+            .fireImmune()
+            .build(ColossalDungeons.MOD_ID + ":broken_sanity"));
+
     public static void register(IEventBus bus) {
         ENTITIES.register(bus);
     }
