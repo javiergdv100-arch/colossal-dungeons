@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Implement all Shared dungeon creatures (4 remaining) and Mirror Castle creatures (9 remaining). Total: 13 entity classes with full AI, stats, and behaviors as described in data.js.",
+  "status": "in_progress",
+  "steps": [
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/NeothelidAdultEntity.java - 320HP, armor 6, tail attack 16 dmg, blind/sound-guided AI with charge, devour, vomit babies, ground slam abilities. Uses large worm model placeholder (Guardian size 2.5x4.0). Extend CDEGeoEntity with SmartBrainLib AI.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/NeothelidBabyEntity.java - 4HP swarm mob, mordisco 2 dmg, follows player if tamed with eggs, can transform into adult if 60+ starve. Small silverfish-sized (0.4x0.3).",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/StitchedWatcherEntity.java - Variable HP elite, wall-mounted watcher with detection/coordination AI. Alerts mobs, activates traps. Eye-based detection mechanics.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/AdventurerWraithEntity.java - 90HP rare ghost, 7 dmg, appears at death locations, repeats last moments, attackable but can be pacified with food. Not immediately hostile.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/ReflectionTwinEntity.java - HP equals player, copies player movements/attacks, linked to mirror surface. Mirror Castle elite.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/GlassServantEntity.java - 24HP, 3 armor, 6 dmg, explodes in shards on death, nearly invisible when still near mirror. Vulnerable to blunt.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/QuicksilverMaidenEntity.java - 30HP, 5 dmg, liquid mercury figure that splits when hit and reforms. Fire hardens it. Travels through mirrors.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/FrameSentinelEntity.java - 40HP, 6 armor, 7 dmg, animated mirror frame that projects false doors/windows. Crystal is weak point.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/SpecularEchoEntity.java - 18HP, repeats player's last action with 1-second delay. Neutralized by doing nothing.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/LanternBearerEntity.java - 22HP, 2 armor, 5 dmg + blindness, hunched servant with lantern that reflects in mirrors to blind. Extinguishing lantern disables it.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/BrokenTwinsEntity.java - 2x120HP miniboss sharing damage pool, specular knights that swap real/reflection roles. Only die if both fall nearly simultaneously.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/LadyQuicksilverEntity.java - 180HP miniboss, mercury witch that converts floors to mirrors and summons mercury hands. Vulnerable only when real reflection exposed.",
+    "Create mod/src/main/java/com/colossaldungeons/enhanced/entity/boss/ShatteredSovereignEntity.java - 1200HP boss with 3 phases, composed of mirror shards. Phase 1: knight combat. Phase 2: fragments attack from multiple reflections. Phase 3: inverts room. Each mirror destroyed reduces armor. Implement IBossPhase with BossPhaseManager."
+  ],
+  "acceptance_criteria": [
+    "All 13 entity Java files compile syntactically (valid Java 21 with correct imports)",
+    "Each entity extends CDEGeoEntity and implements GeoEntity interface",
+    "Each entity has a static createAttributes() method with stats matching data.js",
+    "Boss entities (ShatteredSovereign, BrokenTwins, LadyQuicksilver) implement IBossPhase",
+    "Each entity has registerControllers() with appropriate GeckoLib animations",
+    "AI behaviors reference SmartBrainLib or vanilla goal system as appropriate for entity complexity"
+  ],
+  "verification": [
+    "Check all 13 files exist in correct directories",
+    "Verify each file has correct package declaration and necessary imports",
+    "Verify createAttributes() methods have HP, speed, damage matching the design document"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
