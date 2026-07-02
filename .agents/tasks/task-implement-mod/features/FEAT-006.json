@@ -2,7 +2,7 @@
   "id": "FEAT-006",
   "type": "feat",
   "description": "Implement the Effects system (MobEffects), Block implementations (OilSurfaceBlock, trap blocks, mechanism blocks, puzzle blocks), custom Items with abilities, and Curios API integration for accessories.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Create OiledEffect.java in effect/ extending MobEffect: fire damage 2x multiplier, friction reduction -30% per level, visual overlay sync, propagation on player contact, tick logic.",
     "Create OilProtectionEffect.java in effect/ extending MobEffect: prevents OiledEffect application for duration, visual golden particles.",
@@ -47,5 +47,5 @@
     "All block/item classes reference correct registry entries from CDEBlocks/CDEItems"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All 33 files (32 new + 1 modified CDEEffects.java) successfully created. 9 MobEffect implementations, 12 block implementations, 5 item classes (CDEWeaponItem base + 4 weapons), 3 curio items, 2 utility items. Internal cross-references verified - all imports between mod files resolve correctly. Package declarations match filesystem paths. Braces balanced. CDEBlocks/CDEItems NOT modified per orchestrator constraint - the registry still creates generic Block/Item instances that will need updating to reference the new implementation classes in a separate step. NeoForge 1.21.1 API patterns used: applyEffectTick(ServerLevel, LivingEntity, int), ItemStack.hurtAndBreak(int, LivingEntity, EquipmentSlot), DeferredHolder as Holder<MobEffect> in MobEffectInstance constructors. Cannot verify full compilation due to INTEGRATIONS_ONLY network mode."
 }
